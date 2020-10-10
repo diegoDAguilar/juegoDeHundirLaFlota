@@ -12,7 +12,6 @@ class Barco:
         self.coordenadas = dict(zip([x for x in coordenadas], [True for x in coordenadas]))
         print(self.coordenadas)
 
-
     def estoy_vivo(self):
         for coordenada in self.coordenadas.values():
             if coordenada == True:
