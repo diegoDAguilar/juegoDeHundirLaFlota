@@ -20,3 +20,13 @@ class Jugador:
         print('Barcos colocados')
         pass
 
+    def he_perdido(self):
+        """
+        Guarda una lista NEGADA con si los barcos estan muertos o no
+        False, False son 2 barcos vivos
+        True, True son 2 barcos muertos
+        """
+        mis_barcos = [not b.estoy_vivo() for b in self.tablero_propio.get_barcos()]
+        return all(mis_barcos)
+
+

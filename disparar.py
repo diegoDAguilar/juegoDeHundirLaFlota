@@ -13,23 +13,28 @@ def disparar(ataca, defiende, coordenadas = 'auto', ia = False, nivel = 1):
     """
     if coordenadas == 'auto':
         while True:
-            y,x = np.random.randint(defiende.tablero_propio.matriz.shape[0], size=(2,1))
+            y, x = np.random.randint(defiende.tablero_propio.matriz.shape[0], size=(2, 1))
             if defiende.tablero_propio.matriz[x, y] != BARCO_TOCADO and\
                     defiende.tablero_propio.matriz[x, y] != IMPACTO_AGUA:
                 break
-
-
-    y, x = coordenadas
+    else:
+        y, x = coordenadas
 
     if defiende.tablero_propio.matriz[x, y] == AGUA:
         defiende.tablero_propio.matriz[x, y] = IMPACTO_AGUA
         ataca.tablero_ajeno.matriz[x, y] = IMPACTO_AGUA
         print('Has impactado en el agua')
+        return D_FALLASTE
 
     elif defiende.tablero_propio.matriz[x, y] == BARCO_VIVO:
         defiende.tablero_propio.matriz[x, y] = BARCO_TOCADO
         ataca.tablero_ajeno.matriz[x, y] = BARCO_TOCADO
         print('¡Barco tocado!')
+
+        if defiende.he_perdido():
+            return D_VICTORIA
+        else:
+            return D_ACERTASTE
     else:
         print(f'Has disparado a un OVNI {defiende.tablero_propio.matriz[x, y]}')
 

@@ -2,8 +2,12 @@ import numpy as np
 from Constantes import *
 
 class Tablero:
-    def __init__(self, tamanio=10):
+    def __init__(self, tamanio=TAM_TABLERO):
         self.matriz = np.full((tamanio, tamanio), AGUA)
+
+    def get_barcos(self):
+        """Devuelve la lista con los barcos"""
+        pass
 
     def colocar_barco(self, tam_barco='auto', coordenadas='auto',
                       orientacion='auto'):

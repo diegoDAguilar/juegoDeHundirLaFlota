@@ -3,9 +3,6 @@ from clases.Partida import Partida
 import numpy as np
 
 
-
-
-
 def empezar_partida():
     print("""
     BIENVENIDO A HUNDIR LA FLOTA
