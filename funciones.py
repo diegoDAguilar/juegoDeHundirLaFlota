@@ -32,7 +32,7 @@ def empezar_partida():
     """)
 
     opcion = None
-    while opcion not in ['1','2','3']:
+    while opcion not in ['1', '2', '3']:
         opcion = input()
 
     if opcion == '1':
@@ -42,7 +42,7 @@ def empezar_partida():
         while True:
             try:
                 dificultad = int(input('Elija un nv de dificultad: 1 - 3\n'))
-                if dificultad not in [1,2,3]:
+                if dificultad not in [1, 2, 3]:
                     raise
             # TODO aniadir tipo de excepcion
             except:
@@ -51,7 +51,7 @@ def empezar_partida():
                 # dificultad bn seleccionada
                 break
         partida = Partida()
-        print(partida.jugar())
+        partida.jugar()
     # opcion 3
     else:
         print('HAS SALIDO DEL JUEGO')
