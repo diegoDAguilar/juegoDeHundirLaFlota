@@ -11,21 +11,25 @@ class Tablero:
         self.tam_barco = tam_barco
         self.orientacion = orientacion
         self.coordenadas = coordenadas
-
         orientaciones = ['n', 's', 'e', 'o']
 
-        # Instanciamos el modo aleatorio
-
+        # Si los parámetros están en auto, los genera, sino coge los definidos
         if self.orientacion == 'auto':
             self.orientacion = orientaciones[np.random.randint(4)]
-            self.coordenadas = np.random.randint(self.matriz.shape[0], size=(1, 2))  # Array de (X,Y)
+
+        if self.coordenadas == 'auto':
+            self.coordenadas = np.random.randint(self.matriz.shape[0],
+                                                 size=(1, 2))  # Array de (X,Y)
+        else:
+            self.coordenadas = np.array([coordenadas])
+
+
 
         while True:
-
             # Variables del tablero
-
-            x = self.coordenadas[0][0]
-            y = self.coordenadas[0][1]
+            # x es el segundo elemento, y es el primero
+            x = self.coordenadas[0][1]
+            y = self.coordenadas[0][0]
             x_limit = self.matriz.shape[0]
             y_limit = self.matriz.shape[1]
 
@@ -36,22 +40,23 @@ class Tablero:
             # TODO Barco mirando al NORTE y tamanio 1
             if (0 <= y - self.tam_barco) and (self.orientacion == 'n'):
                 if BARCO_VIVO not in self.matriz[x, (y - self.tam_barco):y]:
-                    self.matriz[x, y - self.tam_barco:y] = BARCO_VIVO
+                    self.matriz[(x - self.tam_barco):x, y] = BARCO_VIVO
+                    print(x, y - self.tam_barco, y)
                     break
 
             elif (y + self.tam_barco < y_limit) and (self.orientacion == 's'):
                 if BARCO_VIVO not in self.matriz[x, y:(y + self.tam_barco)]:
-                    self.matriz[x, y:(y + self.tam_barco)] = BARCO_VIVO
+                    self.matriz[x:(x + self.tam_barco), y] = BARCO_VIVO
                     break
 
             elif (x + self.tam_barco < x_limit) and (self.orientacion == 'e'):
                 if BARCO_VIVO not in self.matriz[x:(x + self.tam_barco), y]:
-                    self.matriz[x:(x + self.tam_barco), y] = BARCO_VIVO
+                    self.matriz[x, y:(y+self.tam_barco)] = BARCO_VIVO
                     break
 
             elif (0 <= x - self.tam_barco) and (self.orientacion == 'o'):
                 if BARCO_VIVO not in self.matriz[(x - self.tam_barco):x, y]:
-                    self.matriz[(x - self.tam_barco):x, y] = BARCO_VIVO
+                    self.matriz[x, (y-self.tam_barco):y] = BARCO_VIVO
                     break
 
             # Si las coordenadas no son válidas,
@@ -61,6 +66,7 @@ class Tablero:
             self.coordenadas = np.random.randint(x_limit, size=(1, 2))  # Array de (X,Y)
 
         print('Barco creado')
+        print(self.orientacion)
         return True
 
 
@@ -100,6 +106,10 @@ class Tablero:
         return self.matriz
 
 
+
 if __name__ == '__main__':
     tab1 = Tablero()
+    print(tab1.devolver_tablero())
+    #BARCO_VIVO in tab1.matriz[1,3]
+    tab1.colocar_barco(4, (5,5), 'n')
     print(tab1.devolver_tablero())
