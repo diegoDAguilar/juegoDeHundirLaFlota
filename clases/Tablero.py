@@ -18,8 +18,7 @@ class Tablero:
 
         if self.orientacion == 'auto':
             self.orientacion = orientaciones[np.random.randint(4)]
-            self.coordenadas = np.random.randint(self.matriz.shape[0],
-                                                 size=(1, 2))  # Array de (X,Y)
+            self.coordenadas = np.random.randint(self.matriz.shape[0], size=(1, 2))  # Array de (X,Y)
 
         while True:
 
@@ -34,6 +33,7 @@ class Tablero:
             # después comprobamos que en las coordenadas no hay barcos
             # y colocamos el nuestro
 
+            # TODO Barco mirando al NORTE y tamanio 1
             if (0 <= y - self.tam_barco) and (self.orientacion == 'n'):
                 if BARCO_VIVO not in self.matriz[x, (y - self.tam_barco):y]:
                     self.matriz[x, y - self.tam_barco:y] = BARCO_VIVO
@@ -66,6 +66,31 @@ class Tablero:
 
     def colocar_todos_barcos(self):
         tamanios_barco = [1,1,1,1,2,2,2,3,3,4]
+        # Por ahora colocar 3 barcos y ya:
+        #self.colocar_barco(1, np.array((1,1)), 'N')
+        #self.colocar_barco(3, np.array((5,5)), 'E')
+        #self.colocar_barco(2, np.array((3,3)), 'S')
+        #self.colocar_barco(1)
+        #self.colocar_barco(3)
+        #self.colocar_barco(2)
+
+        # BARCOS MANUALES
+        self.matriz[3, 2] = 'O'
+        self.matriz[3, 3] = 'O'
+
+        self.matriz[0, 8] = 'O'
+        self.matriz[1, 8] = 'O'
+        self.matriz[2, 8] = 'O'
+
+        self.matriz[7, 4] = 'O'
+
+        print('Mis barcos colocados son: ')
+        print(self.matriz)
+        # TODO eliminar esto cuando los tests funcionen
+        return
+
+
+
         for t in tamanios_barco:
             x,y = 0,0 # TODO aniadir random y la orientacion random
             orientacion = 'N'
@@ -75,5 +100,6 @@ class Tablero:
         return self.matriz
 
 
-tab1 = Tablero()
-print(tab1.devolver_tablero())
+if __name__ == '__main__':
+    tab1 = Tablero()
+    print(tab1.devolver_tablero())

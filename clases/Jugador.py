@@ -16,7 +16,7 @@ class Jugador:
     def preparar_tablero(self):
         # TODO juntar con lo de colocar barcos
         # TODO podra ser rnd o que el jugador elija
-        #self.tablero_propio.colocar_todos_barcos()
+        self.tablero_propio.colocar_todos_barcos()
         print('Barcos colocados')
         pass
 
