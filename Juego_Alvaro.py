@@ -36,13 +36,13 @@ class Barco:
 class Tablero:
 
     def __init__(self, tamanio):
+
         #Construimos el tablero y lo llenamos de agua
-        self.tamanio = np.full((tamanio, tamanio), AGUA)
-        # Esta es la pantalla donde visualizamos los disparos realizados
-        self.pantalla = np.full((tamanio, tamanio), AGUA)
+        self.matriz = np.full((tamanio, tamanio), AGUA)
 
     def coloca_barco(self, tam_barco = 'auto', orientacion = 'auto',
                      coordenadas = 'auto'):
+
         self.tam_barco = tam_barco
         self.orientacion = orientacion
         self.coordenadas = coordenadas
@@ -50,65 +50,72 @@ class Tablero:
         orientaciones = ['n', 's', 'e', 'o']
 
         #Instanciamos el modo aleatorio
-        # TODO el tamanio del barco no puede ser aleatorio, no fair play
-        # TODO ojo con el elif, si se ejecuta el primero no lo haran los siguientes
-        # TODO aunque se cumpla la condicion
-        if self.tam_barco == 'auto':
-            self.tam_barco = np.random.randint(1, 5)  # Valor máximo de eslora: 4
-        elif self.orientacion == 'auto':
+
+        if self.orientacion == 'auto':
             self.orientacion = orientaciones[np.random.randint(4)]
-        elif self.coordenadas == 'auto':
-            self.coordenadas = np.random.randint(self.tamanio.shape[0],
+            self.coordenadas = np.random.randint(self.matriz.shape[0],
                                                  size=(1, 2))  # Array de (X,Y)
 
         while True:
-            # TODO aqui repetimos
+
+            #Variables del tablero
+
+            x = self.coordenadas[0][0]
+            y = self.coordenadas[0][1]
+            x_limit = self.matriz.shape[0]
+            y_limit = self.matriz.shape[1]
+
+            # Comprobamos si la posición es posible en cada orientación,
+            # después comprobamos que en las coordenadas no hay barcos
+            # y colocamos el nuestro
+
+            if (0 <= y-self.tam_barco) and (self.orientacion == 'n'):
+                if BARCO_VIVO not in self.matriz[x, (y - self.tam_barco):y]:
+                    self.matriz[x, y - self.tam_barco:y] = BARCO_VIVO
+                    break
+
+            elif (y + self.tam_barco < y_limit) and (self.orientacion == 's'):
+                if BARCO_VIVO not in self.matriz[x, y:(y + self.tam_barco)]:
+                    self.matriz[x, y:(y + self.tam_barco)] = BARCO_VIVO
+                    break
+
+            elif (x+self.tam_barco < x_limit) and (self.orientacion == 'e'):
+                if BARCO_VIVO not in self.matriz[x:(x + self.tam_barco), y]:
+                    self.matriz[x:(x + self.tam_barco), y] = BARCO_VIVO
+                    break
+
+            elif (0 <= x-self.tam_barco) and (self.orientacion == 'o'):
+                if BARCO_VIVO not in self.matriz[(x - self.tam_barco):x, y]:
+                    self.matriz[(x - self.tam_barco):x, y] = BARCO_VIVO
+                    break
+
+            # Si las coordenadas no son válidas,
+            # generamos unas nuevas y repetimos el proceso
+
             self.orientacion = orientaciones[np.random.randint(4)]
-            self.coordenadas = np.random.randint(self.tamanio.shape[0],
-                                                 size=(1, 2)) #Array de (X,Y)
-
-            print(self.coordenadas, self.orientacion)
-            print('[0]', self.coordenadas[0][0])
-            print('[1]', self.coordenadas[0][1])
-
-            # TODO esto me lo tienes que explicar
-            #Comprobamos si la posición es posible en cada orientación y colocamos barco
-            if 0<=(self.coordenadas[0][1]-self.tam_barco)<self.tamanio.shape[1]and self.orientacion == 'n':
-                if BARCO_VIVO not in self.tamanio[self.coordenadas[0][0], (self.coordenadas[0][1] - self.tam_barco):self.coordenadas[0][1]]:
-                    self.tamanio[self.coordenadas[0][0], self.coordenadas[0][1] - self.tam_barco:self.coordenadas[0][1]] = BARCO_VIVO
-                   # barco1 = Barco()
-                    break
-            elif 0<=(self.coordenadas[0][1]+self.tam_barco)<self.tamanio.shape[1] and self.orientacion == 's':
-                if BARCO_VIVO not in self.tamanio[self.coordenadas[0][0], self.coordenadas[0][1]:(self.coordenadas[0][1] + self.tam_barco)]:
-                    self.tamanio[self.coordenadas[0][0], self.coordenadas[0][1]:(self.coordenadas[0][1] + self.tam_barco)] = BARCO_VIVO
-                    break
-            elif 0<=(self.coordenadas[0][0]+self.tam_barco)<self.tamanio.shape[0] and self.orientacion == 'e':
-                if BARCO_VIVO not in self.tamanio[self.coordenadas[0][0]:(self.coordenadas[0][0] + self.tam_barco), self.coordenadas[0][1]]:
-                    self.tamanio[self.coordenadas[0][0]:(self.coordenadas[0][0] + self.tam_barco), self.coordenadas[0][1]] = BARCO_VIVO
-                    break
-            elif 0<=(self.coordenadas[0][0]-self.tam_barco)<self.tamanio.shape[0] and self.orientacion == 'o':
-                if BARCO_VIVO not in self.tamanio[(self.coordenadas[0][0] - self.tam_barco):self.coordenadas[0][0], self.coordenadas[0][1]]:
-                    self.tamanio[(self.coordenadas[0][0] - self.tam_barco):self.coordenadas[0][0], self.coordenadas[0][1]] = BARCO_VIVO
-                    break
+            self.coordenadas = np.random.randint(x_limit, size=(1, 2)) #Array de (X,Y)
 
 ## FUNCIONES
 def disparar(ataca, defiende, coordenadas = 'auto', dificultad = 1):
+
     if coordenadas == 'auto':
         while True:
             coordenadas = np.random.randint(defiende.tamanio.shape[0], size=(2,1))
-            if defiende.tamanio[coordenadas[0], coordenadas[1]] != BARCO_TOCADO and\
-                    defiende.tamanio[coordenadas[0],coordenadas[1]] != IMPACTO_AGUA:
+            if defiende.tablero[coordenadas[0], coordenadas[1]] != BARCO_TOCADO and\
+                    defiende.tablero[coordenadas[0],coordenadas[1]] != IMPACTO_AGUA:
                 break
 
-    # TODO Esto guay!
-    if defiende.tamanio[coordenadas[0], coordenadas[1]] == AGUA:
-        defiende.tamanio[coordenadas[0], coordenadas[1]] = IMPACTO_AGUA
-        ataca.pantalla[coordenadas[0], coordenadas[1]] = IMPACTO_AGUA
+    # Coordenadas del tablero
+    x,y  = coordenadas
+
+    if defiende.tablero.matriz[x, y] == AGUA:
+        defiende.tablero.matriz[x, y] = IMPACTO_AGUA
+        ataca.visor.matriz[x, y] = IMPACTO_AGUA
         print('Has impactado en el agua')
 
-    elif defiende.tamanio[coordenadas[0], coordenadas[1]] == BARCO_VIVO:
-        defiende.tamanio[coordenadas[0], coordenadas[1]] = BARCO_TOCADO
-        ataca.pantalla[coordenadas[0], coordenadas[1]] = BARCO_TOCADO
+    elif defiende.tablero.matriz[x, y] == BARCO_VIVO:
+        defiende.tablero.matriz[x, y] = BARCO_TOCADO
+        ataca.tablero.matriz[x, y] = BARCO_TOCADO
         print('¡Barco tocado!')
 
 
@@ -117,7 +124,7 @@ def disparar(ataca, defiende, coordenadas = 'auto', dificultad = 1):
 #Creamos dos jugadores
 j1 = Tablero(10)
 j2 = Tablero(10)
-print(j1.tamanio)
+print(j1.matriz)
 
 #Colocamos todos los barcos en cada tablero
 for i in barcos:
@@ -126,15 +133,15 @@ for i in barcos:
     j1.coloca_barco(tam_barco=i)
 
 #Imprimimos los dos tableros
-print('Jugador 1\n', j1.tamanio)
-print('Jugador 2\n', j2.tamanio)
+print('Jugador 1\n', j1.matriz)
+print('Jugador 2\n', j2.matriz)
 
 #El jugador 1 dispara 5 veces al jugador 2
 for i in range(5):
     disparar(j1, j2)
 
 #Imprimimos tablero del jugador 2 y la pantalla del jugador 1
-print(j2.tamanio)
+print(j2.matriz)
 print(j1.pantalla)
 
 
