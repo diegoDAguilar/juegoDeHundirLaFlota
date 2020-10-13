@@ -60,8 +60,11 @@ class Partida:
             #print(self.jugadores[0].tablero_propio.devolver_tablero(),
             #      self.jugadores[1].tablero_propio.devolver_tablero())
             print(self.jugadores[0].tablero_propio.devolver_tablero())
+            print(self.jugadores[0].tablero_ajeno.devolver_tablero())
             print('-----------')
+            print('Tablero maquina')
             print(self.jugadores[1].tablero_propio.devolver_tablero())
+
             columna, fila = leer_teclado()
             while disparar(self.jugadores[0], self.jugadores[1], (columna, fila), False, 1):
                 print('Jugador sigue disparando!')

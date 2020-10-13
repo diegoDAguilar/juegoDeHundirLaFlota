@@ -1,13 +1,18 @@
 import numpy as np
 from Constantes import *
+from clases.Barco import *
 
 class Tablero:
+
+
     def __init__(self, tamanio=TAM_TABLERO):
         self.matriz = np.full((tamanio, tamanio), AGUA)
+        self.lista_barcos = []
 
     def get_barcos(self):
         """Devuelve la lista con los barcos"""
-        pass
+        return self.lista_barcos
+
 
     def colocar_barco(self, tam_barco='auto', coordenadas='auto',
                       orientacion='auto'):
@@ -32,8 +37,8 @@ class Tablero:
         while True:
             # Variables del tablero
             # x es el segundo elemento, y es el primero
-            x = self.coordenadas[0][1]
-            y = self.coordenadas[0][0]
+            columna = self.coordenadas[0][1]
+            fila = self.coordenadas[0][0]
             x_limit = self.matriz.shape[0]
             y_limit = self.matriz.shape[1]
 
@@ -42,25 +47,34 @@ class Tablero:
             # y colocamos el nuestro
 
             # TODO Barco mirando al NORTE y tamanio 1
-            if (0 <= y - self.tam_barco) and (self.orientacion == 'n'):
-                if BARCO_VIVO not in self.matriz[x, (y - self.tam_barco):y]:
-                    self.matriz[(x - self.tam_barco):x, y] = BARCO_VIVO
-                    print(x, y - self.tam_barco, y)
+            if (0 <= columna - self.tam_barco) and (self.orientacion == 'n'):
+                if BARCO_VIVO not in self.matriz[(columna - self.tam_barco):columna, fila]:
+                    self.matriz[(columna - self.tam_barco):columna, fila] = BARCO_VIVO
+
+                    #Añadimos barco
+                    self.lista_barcos.append(Barco(columna, fila, self.tam_barco, 'n'))
                     break
 
-            elif (y + self.tam_barco < y_limit) and (self.orientacion == 's'):
-                if BARCO_VIVO not in self.matriz[x, y:(y + self.tam_barco)]:
-                    self.matriz[x:(x + self.tam_barco), y] = BARCO_VIVO
+            elif (columna + self.tam_barco < x_limit) and (self.orientacion == 's'):
+                if BARCO_VIVO not in self.matriz[columna:(columna + self.tam_barco), fila]:
+                    self.matriz[columna:(columna + self.tam_barco), fila] = BARCO_VIVO
+
+                    self.lista_barcos.append(Barco(columna, fila, self.tam_barco, 's'))
+
                     break
 
-            elif (x + self.tam_barco < x_limit) and (self.orientacion == 'e'):
-                if BARCO_VIVO not in self.matriz[x:(x + self.tam_barco), y]:
-                    self.matriz[x, y:(y+self.tam_barco)] = BARCO_VIVO
+            elif (fila + self.tam_barco < y_limit) and (self.orientacion == 'e'):
+                if BARCO_VIVO not in self.matriz[columna, fila:(fila + self.tam_barco)]:
+                    self.matriz[columna, fila:(fila + self.tam_barco)] = BARCO_VIVO
+
+                    self.lista_barcos.append(Barco(columna, fila, self.tam_barco, 'e'))
                     break
 
-            elif (0 <= x - self.tam_barco) and (self.orientacion == 'o'):
-                if BARCO_VIVO not in self.matriz[(x - self.tam_barco):x, y]:
-                    self.matriz[x, (y-self.tam_barco):y] = BARCO_VIVO
+            elif (0 <= fila - self.tam_barco) and (self.orientacion == 'o'):
+                if BARCO_VIVO not in self.matriz[columna, (fila - self.tam_barco):fila]:
+                    self.matriz[columna, (fila - self.tam_barco):fila] = BARCO_VIVO
+
+                    self.lista_barcos.append(Barco(columna, fila, self.tam_barco, 'o'))
                     break
 
             # Si las coordenadas no son válidas,
@@ -76,6 +90,7 @@ class Tablero:
 
     def colocar_todos_barcos(self):
         tamanios_barco = [1,1,1,1,2,2,2,3,3,4]
+        """
         # Por ahora colocar 3 barcos y ya:
         #self.colocar_barco(1, np.array((1,1)), 'N')
         #self.colocar_barco(3, np.array((5,5)), 'E')
@@ -98,13 +113,13 @@ class Tablero:
         print(self.matriz)
         # TODO eliminar esto cuando los tests funcionen
         return
-
+        """
 
 
         for t in tamanios_barco:
-            x,y = 0,0 # TODO aniadir random y la orientacion random
-            orientacion = 'N'
-            self.colocar_barco(t, (x,y), orientacion)
+            #x,y = 0,0 # TODO aniadir random y la orientacion random
+            #orientacion = 'N'
+            self.colocar_barco(t, coordenadas='auto', orientacion='auto')
 
     def devolver_tablero(self):
         return self.matriz
@@ -115,5 +130,5 @@ if __name__ == '__main__':
     tab1 = Tablero()
     print(tab1.devolver_tablero())
     #BARCO_VIVO in tab1.matriz[1,3]
-    tab1.colocar_barco(4, (5,5), 'n')
+    tab1.colocar_barco(4, (3,5), 'n')
     print(tab1.devolver_tablero())

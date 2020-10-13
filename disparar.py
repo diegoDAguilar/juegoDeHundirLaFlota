@@ -13,22 +13,22 @@ def disparar(ataca, defiende, coordenadas = 'auto', ia = False, nivel = 1):
     """
     if coordenadas == 'auto':
         while True:
-            y, x = np.random.randint(defiende.tablero_propio.matriz.shape[0], size=(2, 1))
-            if defiende.tablero_propio.matriz[x, y] != BARCO_TOCADO and\
-                    defiende.tablero_propio.matriz[x, y] != IMPACTO_AGUA:
+            columna, fila = np.random.randint(TAM_TABLERO), np.random.randint(TAM_TABLERO)
+            if defiende.tablero_propio.matriz[fila, columna] != BARCO_TOCADO and\
+                    defiende.tablero_propio.matriz[fila, columna] != IMPACTO_AGUA:
                 break
     else:
-        y, x = coordenadas
+        columna, fila = coordenadas
 
-    if defiende.tablero_propio.matriz[x, y] == AGUA:
-        defiende.tablero_propio.matriz[x, y] = IMPACTO_AGUA
-        ataca.tablero_ajeno.matriz[x, y] = IMPACTO_AGUA
+    if defiende.tablero_propio.matriz[fila, columna] == AGUA:
+        defiende.tablero_propio.matriz[fila, columna] = IMPACTO_AGUA
+        ataca.tablero_ajeno.matriz[fila, columna] = IMPACTO_AGUA
         print('Has impactado en el agua')
         return D_FALLASTE
 
-    elif defiende.tablero_propio.matriz[x, y] == BARCO_VIVO:
-        defiende.tablero_propio.matriz[x, y] = BARCO_TOCADO
-        ataca.tablero_ajeno.matriz[x, y] = BARCO_TOCADO
+    elif defiende.tablero_propio.matriz[fila, columna] == BARCO_VIVO:
+        defiende.tablero_propio.matriz[fila, columna] = BARCO_TOCADO
+        ataca.tablero_ajeno.matriz[fila, columna] = BARCO_TOCADO
         print('¡Barco tocado!')
 
         if defiende.he_perdido():
@@ -36,7 +36,7 @@ def disparar(ataca, defiende, coordenadas = 'auto', ia = False, nivel = 1):
         else:
             return D_ACERTASTE
     else:
-        print(f'Has disparado a un OVNI {defiende.tablero_propio.matriz[x, y]}')
+        print(f'Has disparado a un OVNI {defiende.tablero_propio.matriz[fila, columna]}')
 
     # TODO: no se como meter la parte de IA
     """
