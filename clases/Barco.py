@@ -6,31 +6,10 @@ import numpy as np
 
 class Barco:
 
-    def __init__(self, x, y, tam_barco, orientacion):
-
-        self.columna = x
-        self.fila = y
-        self.tam_barco = tam_barco
-        self.orientacion = orientacion
-
-        # Coordenadas vienen por slicing [x,a-y],
-        # necesitamos individualizar cada punto del barco
-        coordenadas = []
-        if self.orientacion == 'n':
-            for i in range(self.tam_barco):
-                coordenadas.append((self.columna - i, self.fila))
-        elif self.orientacion == 's':
-            for i in range(self.tam_barco):
-                coordenadas.append((self.columna, self.fila + i))
-        elif self.orientacion == 'e':
-            for i in range(self.tam_barco):
-                coordenadas.append((self.columna + i, self.fila))
-        elif self.orientacion == 'o':
-            for i in range(self.tam_barco):
-                coordenadas.append((self.columna, self.fila - i))
+    def __init__(self, coordenadas):
 
 
-        #Lista de coordenadas
+        #Diccionario de coordenadas
         self.coordenadas = dict(zip([x for x in coordenadas], [True for x in coordenadas]))
         print(self.coordenadas)
 
@@ -43,6 +22,10 @@ class Barco:
         else:
             print('Estoy hundido')
             return False
+
+    def golpear_barco(self, impacto):
+        self.coordenadas[impacto] = False
+        print('Barco golpeado')
 
 ##TEST
 
