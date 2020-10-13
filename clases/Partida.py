@@ -60,19 +60,25 @@ class Partida:
             #print(self.jugadores[0].tablero_propio.devolver_tablero(),
             #      self.jugadores[1].tablero_propio.devolver_tablero())
             print(self.jugadores[0].tablero_propio.devolver_tablero())
+            print('Tablero ajeno')
             print(self.jugadores[0].tablero_ajeno.devolver_tablero())
             print('-----------')
             print('Tablero maquina')
             print(self.jugadores[1].tablero_propio.devolver_tablero())
 
             columna, fila = leer_teclado()
-            while disparar(self.jugadores[0], self.jugadores[1], (columna, fila), False, 1):
+            codigo = disparar(self.jugadores[0], self.jugadores[1], (columna, fila), False, 1)
+            while codigo == 1:
                 print('Jugador sigue disparando!')
                 print(self.jugadores[0].tablero_propio.devolver_tablero())
                 print('-----------')
                 print(self.jugadores[1].tablero_propio.devolver_tablero())
                 columna, fila = leer_teclado()
+                codigo = disparar(self.jugadores[0], self.jugadores[1], (columna, fila), False, 1)
                 pass
+            if codigo == 2:
+                print('Enhorabuena, has ganado!, FIN de la partida')
+                return 0
 
 
         # TURNO J2
@@ -91,11 +97,13 @@ class Partida:
                       self.jugadores[1].tablero_propio.devolver_tablero())
                 columna, fila = leer_teclado()
 
+        return 1
+
     def jugar(self):
         print('Estas jugando')
         for j in self.jugadores:
             j.preparar_tablero()
         print('Tablero listo. Comienza la partida.')
-        while True:
-            self.nuevo_turno()
+        while self.nuevo_turno():
+            pass
         # contiene los distintos turnos
