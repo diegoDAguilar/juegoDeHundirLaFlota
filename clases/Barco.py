@@ -6,7 +6,29 @@ import numpy as np
 
 class Barco:
 
-    def __init__(self, coordenadas):
+    def __init__(self, x, y, tam_barco, orientacion):
+
+        self.columna = x
+        self.fila = y
+        self.tam_barco = tam_barco
+        self.orientacion = orientacion
+
+        # Coordenadas vienen por slicing [x,a-y],
+        # necesitamos individualizar cada punto del barco
+        coordenadas = []
+        if self.orientacion == 'n':
+            for i in range(self.tam_barco):
+                coordenadas.append((self.columna - i, self.fila))
+        elif self.orientacion == 's':
+            for i in range(self.tam_barco):
+                coordenadas.append((self.columna, self.fila + i))
+        elif self.orientacion == 'e':
+            for i in range(self.tam_barco):
+                coordenadas.append((self.columna + i, self.fila))
+        elif self.orientacion == 'o':
+            for i in range(self.tam_barco):
+                coordenadas.append((self.columna, self.fila - i))
+
 
         #Lista de coordenadas
         self.coordenadas = dict(zip([x for x in coordenadas], [True for x in coordenadas]))
@@ -24,11 +46,8 @@ class Barco:
 
 ##TEST
 
-coors = ([(1,3),
-          (2,3),
-          (3,3)])
+if __name__ == '__main__':
+    barco1 = Barco(5,5,4,'n')
+    print(barco1.estoy_vivo())
 
-barco1 = Barco(coors)
-print(barco1.estoy_vivo())
-
-##FIN TEST
+## FIN TEST
