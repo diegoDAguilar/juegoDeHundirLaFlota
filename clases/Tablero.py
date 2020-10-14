@@ -33,6 +33,7 @@ class Tablero:
 
 
 
+
     def colocar_barco(self, tam_barco='auto', coordenadas='auto',
                       orientacion='auto'):
 
@@ -65,62 +66,66 @@ class Tablero:
             if (0 <= fila - tam_barco) and (orientacion == 'n'):
                 if BARCO_VIVO not in self.matriz[fila-tam_barco:fila, columna]:
                     l_coordenadas = Tablero.rellenar_coordenadas(columna, fila, tam_barco, orientacion)
-                    for c, f in l_coordenadas:
-                        self.matriz[f, c] = BARCO_VIVO
+                    if Tablero.barco_aislado(l_coordenadas, self.matriz) == True:
+                        for c, f in l_coordenadas:
+                            self.matriz[f, c] = BARCO_VIVO
 
-                    #Añadimos barco
-                    #print('Creando barco')
-                    #print(l_coordenadas)
-                    #print('orientacion:', orientacion)
+                        #Añadimos barco
+                        #print('Creando barco')
+                        #print(l_coordenadas)
+                        #print('orientacion:', orientacion)
 
-                    self.lista_barcos.append(Barco(l_coordenadas))
-                    #print('Barco creado')
-                    break
+                        self.lista_barcos.append(Barco(l_coordenadas))
+                        #print('Barco creado')
+                        break
 
             elif (fila + tam_barco < x_limit) and (orientacion == 's'):
                 if BARCO_VIVO not in self.matriz[fila:fila + tam_barco, columna]:
                     l_coordenadas = Tablero.rellenar_coordenadas(columna, fila, tam_barco, orientacion)
-                    for c, f in l_coordenadas:
-                        self.matriz[f, c] = BARCO_VIVO
+                    if Tablero.barco_aislado(l_coordenadas, self.matriz) == True:
+                        for c, f in l_coordenadas:
+                            self.matriz[f, c] = BARCO_VIVO
 
-                    # Añadimos barco
-                    #print('Creando barco')
-                    #print(l_coordenadas)
-                    #print('orientacion:', orientacion)
+                        # Añadimos barco
+                        #print('Creando barco')
+                        #print(l_coordenadas)
+                        #print('orientacion:', orientacion)
 
-                    self.lista_barcos.append(Barco(l_coordenadas))
-                    #print('Barco creado')
-                    break
+                        self.lista_barcos.append(Barco(l_coordenadas))
+                        #print('Barco creado')
+                        break
 
             elif (columna + tam_barco < y_limit) and (orientacion == 'e'):
                 if BARCO_VIVO not in self.matriz[fila, columna:columna+tam_barco]:
                     l_coordenadas = Tablero.rellenar_coordenadas(columna, fila, tam_barco, orientacion)
-                    for c, f in l_coordenadas:
-                        self.matriz[f, c] = BARCO_VIVO
+                    if Tablero.barco_aislado(l_coordenadas, self.matriz) == True:
+                        for c, f in l_coordenadas:
+                            self.matriz[f, c] = BARCO_VIVO
 
-                    #Añadimos barco
-                    #print('Creando barco')
-                    #print(l_coordenadas)
-                    #print('orientacion:', orientacion)
+                        #Añadimos barco
+                        #print('Creando barco')
+                        #print(l_coordenadas)
+                        #print('orientacion:', orientacion)
 
-                    self.lista_barcos.append(Barco(l_coordenadas))
-                    #print('Barco creado')
-                    break
+                        self.lista_barcos.append(Barco(l_coordenadas))
+                        #print('Barco creado')
+                        break
 
             elif (0 <= columna - tam_barco) and (orientacion == 'w'):
                 if BARCO_VIVO not in self.matriz[fila, columna-tam_barco:columna]:
                     l_coordenadas = Tablero.rellenar_coordenadas(columna, fila, tam_barco, orientacion)
-                    for c, f in l_coordenadas:
-                        self.matriz[f, c] = BARCO_VIVO
+                    if Tablero.barco_aislado(l_coordenadas, self.matriz) == True:
+                        for c, f in l_coordenadas:
+                            self.matriz[f, c] = BARCO_VIVO
 
-                    #Añadimos barco
-                    #print('Creando barco')
-                    #print(l_coordenadas)
-                    #print('orientacion:', orientacion)
+                        #Añadimos barco
+                        #print('Creando barco')
+                        #print(l_coordenadas)
+                        #print('orientacion:', orientacion)
 
-                    self.lista_barcos.append(Barco(l_coordenadas))
-                    #print('Barco creado')
-                    break
+                        self.lista_barcos.append(Barco(l_coordenadas))
+                        #print('Barco creado')
+                        break
 
             # Si las coordenadas no son válidas,
             # generamos unas nuevas y repetimos el proceso
@@ -147,6 +152,83 @@ class Tablero:
                 coordenadas.append((columna - i, fila))
 
         return coordenadas
+
+    @staticmethod
+    def barco_aislado(coors, tablero):
+
+        for c, f in coors:
+            #Comienza el churro
+            if c==0:
+                if f==0:
+                    if (tablero[f, c + 1] == BARCO_VIVO) or \
+                            (tablero[f + 1, c] == BARCO_VIVO) or \
+                            (tablero[f + 1, c + 1] == BARCO_VIVO):
+                        return False
+
+                elif f==9:
+                    if (tablero[f - 1, c] == BARCO_VIVO) or \
+                            (tablero[f - 1, c + 1] == BARCO_VIVO) or \
+                            (tablero[f, c + 1] == BARCO_VIVO):
+                        return False
+
+                else:
+                    if (tablero[f - 1, c] == BARCO_VIVO) or \
+                            (tablero[f - 1, c + 1] == BARCO_VIVO) or \
+                            (tablero[f, c + 1] == BARCO_VIVO) or \
+                            (tablero[f + 1, c] == BARCO_VIVO) or \
+                            (tablero[f + 1, c + 1] == BARCO_VIVO):
+                        return False
+
+            elif c==9:
+                if f==0:
+                    if (tablero[f, c - 1] == BARCO_VIVO) or \
+                            (tablero[f + 1, c - 1] == BARCO_VIVO) or \
+                            (tablero[f + 1, c] == BARCO_VIVO):
+                        return False
+
+                elif f==9:
+                    if (tablero[f - 1, c - 1] == BARCO_VIVO) or \
+                            (tablero[f - 1, c] == BARCO_VIVO) or \
+                            (tablero[f, c - 1] == BARCO_VIVO):
+                        return False
+
+                else:
+                    if (tablero[f - 1, c - 1] == BARCO_VIVO) or \
+                            (tablero[f - 1, c] == BARCO_VIVO) or \
+                            (tablero[f, c - 1] == BARCO_VIVO) or \
+                            (tablero[f + 1, c - 1] == BARCO_VIVO) or \
+                            (tablero[f + 1, c] == BARCO_VIVO):
+                        return False
+
+            elif c!=0 or c!=9:
+                if f==0:
+                    if (tablero[f, c - 1] == BARCO_VIVO) or \
+                            (tablero[f, c + 1] == BARCO_VIVO) or \
+                            (tablero[f + 1, c - 1] == BARCO_VIVO) or \
+                            (tablero[f + 1, c] == BARCO_VIVO) or \
+                            (tablero[f + 1, c + 1] == BARCO_VIVO):
+                        return False
+
+                elif f==9:
+                    if (tablero[f - 1, c - 1] == BARCO_VIVO) or \
+                            (tablero[f - 1, c] == BARCO_VIVO) or \
+                            (tablero[f - 1, c + 1] == BARCO_VIVO) or \
+                            (tablero[f, c - 1] == BARCO_VIVO) or \
+                            (tablero[f, c + 1] == BARCO_VIVO):
+                        return False
+                else:
+                    if (tablero[f - 1, c - 1] == BARCO_VIVO) or \
+                            (tablero[f - 1, c] == BARCO_VIVO) or \
+                            (tablero[f - 1, c + 1] == BARCO_VIVO) or \
+                            (tablero[f, c - 1] == BARCO_VIVO) or \
+                            (tablero[f, c + 1] == BARCO_VIVO) or \
+                            (tablero[f + 1, c - 1] == BARCO_VIVO) or \
+                            (tablero[f + 1, c] == BARCO_VIVO) or \
+                            (tablero[f + 1, c + 1] == BARCO_VIVO):
+                        return False
+
+        else:
+            return True
 
 
     def colocar_todos_barcos(self):
