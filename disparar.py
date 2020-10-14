@@ -14,21 +14,22 @@ def disparar(ataca, defiende, coordenadas = 'auto', ia = False, nivel = 1):
     if coordenadas == 'auto':
         while True:
             columna, fila = np.random.randint(TAM_TABLERO), np.random.randint(TAM_TABLERO)
-            if defiende.tablero_propio.matriz[fila, columna] != BARCO_TOCADO and\
-                    defiende.tablero_propio.matriz[fila, columna] != IMPACTO_AGUA:
+            if (ataca.tablero_ajeno.matriz[fila, columna] != BARCO_TOCADO and
+                    ataca.tablero_ajeno.matriz[fila, columna] != IMPACTO_AGUA):
+                # Sale porque tiene las nuevas coordenadas validas
                 break
     else:
-        fila, columna = coordenadas
+        columna, fila = coordenadas[0], coordenadas[1]
 
-    if defiende.tablero_propio.get_coordenada((fila, columna)) == AGUA:
-        defiende.tablero_propio.set_coordenada((fila, columna), IMPACTO_AGUA)
-        ataca.tablero_ajeno.set_coordenada((fila, columna), IMPACTO_AGUA)
+    if defiende.tablero_propio.get_coordenada((columna, fila)) == AGUA:
+        defiende.tablero_propio.set_coordenada((columna, fila), IMPACTO_AGUA)
+        ataca.tablero_ajeno.set_coordenada((columna, fila), IMPACTO_AGUA)
         print('Has impactado en el agua')
         return D_FALLASTE
 
-    elif defiende.tablero_propio.get_coordenada((fila, columna)) == BARCO_VIVO:
-        defiende.tablero_propio.set_coordenada((fila, columna), BARCO_TOCADO)
-        ataca.tablero_ajeno.set_coordenada((fila, columna), BARCO_TOCADO)
+    elif defiende.tablero_propio.get_coordenada((columna, fila)) == BARCO_VIVO:
+        defiende.tablero_propio.set_coordenada((columna, fila), BARCO_TOCADO)
+        ataca.tablero_ajeno.set_coordenada((columna, fila), BARCO_TOCADO)
         print('¡Barco tocado!')
 
         if defiende.he_perdido():

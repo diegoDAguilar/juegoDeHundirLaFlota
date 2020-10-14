@@ -21,14 +21,15 @@ if d1_acierta:
     # Calcula las coordenadas adyacentes
     # ojo con los limites del tablero
 
+    # Selecciona una direccion random entre N,S,E,W
     direccion = direcciones_posibles.pop(np.random.randint(len(direcciones_posibles)))
     while not barco_localizado:
-        # direccion devuelve N, S, E, W
 
         # Aqui se aniaden a objetivos_pendientes las coord a las que debe disparar
         # en funcion de si elige disparar Vertical o Horizontal
         # solo se aniaden si no hay un objetivo pendiente
         if not objetivos_pendientes:
+            # v_h_dict contiene V con N,S y H con E,W
             if direccion in v_h_dict['V']:
                 [objetivos_pendientes.append(d1 + coord_dict[o]) for o in coord_dict.keys() if o in v_h_dict['V']]
                 v_h_elegido = 'V'

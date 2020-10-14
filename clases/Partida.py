@@ -27,13 +27,15 @@ class Partida:
                 try:
                     entrada_teclado = input('Coordenadas objetivo: ')
                     # TODO mejorar tratamiento excepciones
-                    columna, fila = int(chr(ord(entrada_teclado[0].lower()) - 48)) - 1, int(entrada_teclado[1:]) - 1
+                    columna, fila = (ord(entrada_teclado[0].lower())) - 97, int(entrada_teclado[1:]) - 1
                     if (len(entrada_teclado) not in [2, 3] or
                             not 0 <= fila < TAM_TABLERO or
                             not 0 <= columna < TAM_TABLERO):
                         print('Ha fallado una condicion')
                         raise
                 except:
+                    print('Lectura de: (c,f)', columna, fila, 'normal:', entrada_teclado)
+
                     print('''El formato de las coordenadas debe ser:)
                     Columnas A-J, filas 1-10, ej: A8
                     En el except''')
