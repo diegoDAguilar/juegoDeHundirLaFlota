@@ -16,18 +16,18 @@ class Barco:
     def estoy_vivo(self):
         for c in self.coordenadas.values():
             if c:
-                print('Estoy vivo')
+                #print('Estoy vivo')
                 return True
 
         else:
-            print('Estoy hundido')
+            print('Barco hundido')
             return False
 
     def golpear_barco(self, impacto):
         c = impacto[0]
         f = impacto[1]
         self.coordenadas[c, f] = False
-        print('Barco golpeado')
+        #print('Barco golpeado')
 
     def get_coordenadas(self):
         return self.coordenadas.keys()

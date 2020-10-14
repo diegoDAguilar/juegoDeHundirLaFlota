@@ -43,12 +43,13 @@ if d1_acierta:
         # si acierta el segundo disparo
         if dn_acierta:
             print(f'Coordenada Vertica u Horizontal del barco localizada en {dn}.')
+            barco_localizado = True
             # Si elige V, elimina H y viceversa
-            [direcciones_posibles.remove(i) for i in direcciones_posibles.copy() if i not in v_h_dict[v_h_elegido]]
+            #[direcciones_posibles.remove(i) for i in direcciones_posibles.copy() if i not in v_h_dict[v_h_elegido]]
             print('Disparando a esas coordenadas.')
             break
         else:
-            print(f'Agua en la direccion {direccion}.')
+            print(f'Agua en la direccion {direccion}, en el punto {direccion + dn}.')
             pass
 
     while barco_vivo:

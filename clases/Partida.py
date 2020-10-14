@@ -22,7 +22,7 @@ class Partida:
 
     def nuevo_turno(self):
         def leer_teclado():
-            print('Es su turno, ¡dispare!')
+            #print('Es su turno, ¡dispare!')
             while True:
                 try:
                     entrada_teclado = input('Coordenadas objetivo: ')
@@ -31,11 +31,9 @@ class Partida:
                     if (len(entrada_teclado) not in [2, 3] or
                             not 0 <= fila < TAM_TABLERO or
                             not 0 <= columna < TAM_TABLERO):
-                        print('Ha fallado una condicion')
+                        #print('Ha fallado una condicion')
                         raise
                 except:
-                    print('Lectura de: (c,f)', columna, fila, 'normal:', entrada_teclado)
-
                     print('''El formato de las coordenadas debe ser:)
                     Columnas A-J, filas 1-10, ej: A8
                     En el except''')
@@ -52,10 +50,10 @@ class Partida:
         print('Turno de J1')
         # j1 juega hasta que falle
         if self.jugadores[0].auto:
-            print('Maquina disparando!')
+            #print('Maquina disparando!')
             codigo = disparar(self.jugadores[0], self.jugadores[1])
             while codigo == 1:
-                print('Maquina sigue disparando!!')
+                #print('Maquina sigue disparando!!')
                 codigo = disparar(self.jugadores[0], self.jugadores[1])
                 pass
             if codigo == 2:
@@ -63,15 +61,16 @@ class Partida:
                 return 0
         # si no es automatico, que introduzca la coord de disparo
         else:
-            print('Jugador disparando!')
+           #print('Jugador disparando!')
             #print(self.jugadores[0].tablero_propio.devolver_tablero(),
             #      self.jugadores[1].tablero_propio.devolver_tablero())
             print(self.jugadores[0].tablero_propio.devolver_tablero())
-            print('Tablero ajeno')
-            #print(self.jugadores[0].tablero_ajeno.devolver_tablero())
+            print('---')
+            print(self.jugadores[0].tablero_ajeno.devolver_tablero())
             print('-----------')
             print('Tablero maquina')
             print(self.jugadores[1].tablero_propio.devolver_tablero())
+            print(self.jugadores[1].tablero_ajeno.devolver_tablero())
 
             columna, fila = leer_teclado()
             codigo = disparar(self.jugadores[0], self.jugadores[1], (columna, fila), False, 1)
@@ -79,10 +78,14 @@ class Partida:
             #columnaMOCK, filaMOCK = leer_teclado()
             #codigoMOCK = disparar(self.jugadores[1], self.jugadores[0], (columnaMOCK, filaMOCK), False, 1)
             while codigo == 1:
-                print('Jugador sigue disparando!')
+                #print('Jugador sigue disparando!')
                 print(self.jugadores[0].tablero_propio.devolver_tablero())
+                print('---')
+                print(self.jugadores[0].tablero_ajeno.devolver_tablero())
                 print('-----------')
+                print('Tablero maquina')
                 print(self.jugadores[1].tablero_propio.devolver_tablero())
+                print(self.jugadores[1].tablero_ajeno.devolver_tablero())
                 columna, fila = leer_teclado()
                 codigo = disparar(self.jugadores[0], self.jugadores[1], (columna, fila), False, 1)
 

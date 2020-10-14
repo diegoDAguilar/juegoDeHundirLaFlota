@@ -26,9 +26,9 @@ class Jugador:
         False, False son 2 barcos vivos
         True, True son 2 barcos muertos
         """
-        print('Probando si he perdido')
+        #print('Probando si he perdido')
         mis_barcos = [not b.estoy_vivo() for b in self.tablero_propio.get_barcos()]
-        print('devuelven:', mis_barcos)
+        #print('devuelven:', mis_barcos)
         return all(mis_barcos)
 
 

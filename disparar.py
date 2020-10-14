@@ -20,22 +20,22 @@ def disparar(ataca, defiende, coordenadas = 'auto', ia = False, nivel = 1):
                 break
     else:
         columna, fila = coordenadas[0], coordenadas[1]
-
+    print('Disparo (c,f):', (columna, fila))
     if defiende.tablero_propio.get_coordenada((columna, fila)) == AGUA:
         defiende.tablero_propio.set_coordenada((columna, fila), IMPACTO_AGUA)
         ataca.tablero_ajeno.set_coordenada((columna, fila), IMPACTO_AGUA)
-        print('Has impactado en el agua')
+        print('Agua')
         return D_FALLASTE
 
     elif defiende.tablero_propio.get_coordenada((columna, fila)) == BARCO_VIVO:
         defiende.tablero_propio.set_coordenada((columna, fila), BARCO_TOCADO)
         ataca.tablero_ajeno.set_coordenada((columna, fila), BARCO_TOCADO)
-        print('¡Barco tocado!')
+        print('Tocado')
 
         if defiende.he_perdido():
             return D_VICTORIA
         else:
             return D_ACERTASTE
     else:
-        print(f'Has disparado a un OVNI {defiende.tablero_propio.matriz[fila, columna]}')
+        print('Has disparado a una coordenada rara')
         return D_FALLASTE
