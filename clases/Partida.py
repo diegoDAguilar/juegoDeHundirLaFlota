@@ -1,7 +1,7 @@
 from clases.Jugador import Jugador
 from Constantes import *
 from disparar import disparar
-
+from clases.maquina_overpower import maquina_apunta_dispara
 
 class Partida:
     def __init__(self, j1='humano', j2='auto', dificultad=1):
@@ -14,10 +14,6 @@ class Partida:
             elif j == 'auto':
                 self.jugadores.append(Jugador(dificultad))
 
-    def imprimir_todo(self):
-        "Imprime todos los tableros"
-        # TODO
-        pass
 
 
     def nuevo_turno(self):
@@ -51,10 +47,11 @@ class Partida:
         # j1 juega hasta que falle
         if self.jugadores[0].auto:
             #print('Maquina disparando!')
-            codigo = disparar(self.jugadores[0], self.jugadores[1])
+            codigo, impacto = disparar(self.jugadores[0], self.jugadores[1])
             while codigo == 1:
+                codigo = maquina_apunta_dispara(self.jugadores[0], self.jugadores[1], impacto)
                 #print('Maquina sigue disparando!!')
-                codigo = disparar(self.jugadores[0], self.jugadores[1])
+                #codigo = disparar(self.jugadores[0], self.jugadores[1])
                 pass
             if codigo == 2:
                 print('Enhorabuena J1, has ganado!, FIN de la partida')
@@ -67,27 +64,27 @@ class Partida:
             print(self.jugadores[0].tablero_propio.devolver_tablero())
             print('---')
             print(self.jugadores[0].tablero_ajeno.devolver_tablero())
-            print('-----------')
-            print('Tablero maquina')
-            print(self.jugadores[1].tablero_propio.devolver_tablero())
-            print(self.jugadores[1].tablero_ajeno.devolver_tablero())
+            #print('-----------')
+            #print('Tablero maquina')
+            #print(self.jugadores[1].tablero_propio.devolver_tablero())
+            #print(self.jugadores[1].tablero_ajeno.devolver_tablero())
 
             columna, fila = leer_teclado()
-            codigo = disparar(self.jugadores[0], self.jugadores[1], (columna, fila), False, 1)
+            codigo, impacto = disparar(self.jugadores[0], self.jugadores[1], (columna, fila))
             #print('MOCK:')
             #columnaMOCK, filaMOCK = leer_teclado()
-            #codigoMOCK = disparar(self.jugadores[1], self.jugadores[0], (columnaMOCK, filaMOCK), False, 1)
+            #codigoMOCK, impacto = disparar(self.jugadores[1], self.jugadores[0], (columnaMOCK, filaMOCK))
             while codigo == 1:
                 #print('Jugador sigue disparando!')
                 print(self.jugadores[0].tablero_propio.devolver_tablero())
                 print('---')
                 print(self.jugadores[0].tablero_ajeno.devolver_tablero())
                 print('-----------')
-                print('Tablero maquina')
-                print(self.jugadores[1].tablero_propio.devolver_tablero())
-                print(self.jugadores[1].tablero_ajeno.devolver_tablero())
+                #print('Tablero maquina')
+                #print(self.jugadores[1].tablero_propio.devolver_tablero())
+                #print(self.jugadores[1].tablero_ajeno.devolver_tablero())
                 columna, fila = leer_teclado()
-                codigo = disparar(self.jugadores[0], self.jugadores[1], (columna, fila), False, 1)
+                codigo, impacto = disparar(self.jugadores[0], self.jugadores[1], (columna, fila))
 
                 pass
             if codigo == 2:
@@ -100,9 +97,9 @@ class Partida:
         if self.jugadores[1].auto:
             print('Maquina disparando!')
             codigo = disparar(self.jugadores[1], self.jugadores[0])
-            while codigo == 1:
+            while 1 and codigo == 1:
                 print('Maquina sigue disparando!')
-                codigo = disparar(self.jugadores[1], self.jugadores[0])
+                codigo = maquina_apunta_dispara(self.jugadores[1], self.jugadores[0], impacto)
             if codigo == 2:
                 print('Enhorabuena J2, has ganado!, FIN de la partida')
                 return 0
@@ -111,12 +108,12 @@ class Partida:
             print(self.jugadores[0].tablero_propio.devolver_tablero(),
                   self.jugadores[1].tablero_propio.devolver_tablero())
             columna, fila = leer_teclado()
-            codigo = disparar(self.jugadores[1], self.jugadores[0], (columna, fila), False, 1)
+            codigo, impacto = disparar(self.jugadores[1], self.jugadores[0], (columna, fila))
             while codigo == 1:
                 print(self.jugadores[0].tablero_propio.devolver_tablero(),
                       self.jugadores[1].tablero_propio.devolver_tablero())
                 columna, fila = leer_teclado()
-                codigo = disparar(self.jugadores[1], self.jugadores[0], (columna, fila), False, 1)
+                codigo, impacto = disparar(self.jugadores[1], self.jugadores[0], (columna, fila))
             if codigo == 2:
                 print('Enhorabuena J2, has ganado!, FIN de la partida')
                 return 0
