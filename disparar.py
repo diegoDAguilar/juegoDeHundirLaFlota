@@ -18,23 +18,14 @@ def disparar(ataca, defiende, coordenadas = 'auto', ia = False, nivel = 1):
                     defiende.tablero_propio.matriz[fila, columna] != IMPACTO_AGUA:
                 break
     else:
-         fila,columna = coordenadas
+        fila, columna = coordenadas
 
-   # if defiende.tablero_propio.matriz[fila, columna] == AGUA:
-    #    defiende.tablero_propio.matriz[fila, columna] = IMPACTO_AGUA
-     #   ataca.tablero_ajeno.matriz[fila, columna] = IMPACTO_AGUA
-      #  print('Has impactado en el agua')
-       # return D_FALLASTE
     if defiende.tablero_propio.get_coordenada((fila, columna)) == AGUA:
         defiende.tablero_propio.set_coordenada((fila, columna), IMPACTO_AGUA)
         ataca.tablero_ajeno.set_coordenada((fila, columna), IMPACTO_AGUA)
         print('Has impactado en el agua')
         return D_FALLASTE
 
-    #elif defiende.tablero_propio.matriz[fila, columna] == BARCO_VIVO:
-     #   defiende.tablero_propio.matriz[fila, columna] = BARCO_TOCADO
-      #  ataca.tablero_ajeno.matriz[fila, columna] = BARCO_TOCADO
-       # print('¡Barco tocado!')
     elif defiende.tablero_propio.get_coordenada((fila, columna)) == BARCO_VIVO:
         defiende.tablero_propio.set_coordenada((fila, columna), BARCO_TOCADO)
         ataca.tablero_ajeno.set_coordenada((fila, columna), BARCO_TOCADO)
@@ -46,14 +37,4 @@ def disparar(ataca, defiende, coordenadas = 'auto', ia = False, nivel = 1):
             return D_ACERTASTE
     else:
         print(f'Has disparado a un OVNI {defiende.tablero_propio.matriz[fila, columna]}')
-
-    # TODO: no se como meter la parte de IA
-    """
-    if not ia:
-        if tablero[x, y] == BARCO_VIVO:
-            tablero[x, y] = BARCO_TOCADO
-        elif tablero[x, y] == AGUA:
-            tablero[x, y] = IMPACTO_AGUA
-        else:
-            pass
-    """
+        return D_FALLASTE

@@ -150,7 +150,7 @@ class Tablero:
 
 
     def colocar_todos_barcos(self):
-        tamanios_barco = [1,1]
+        tamanios_barco = [1, 1]
         #tamanios_barco = [1,1,1,1,2,2,2,3,3,4]
         """
         # Por ahora colocar 3 barcos y ya:

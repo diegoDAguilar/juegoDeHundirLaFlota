@@ -51,9 +51,14 @@ class Partida:
         # j1 juega hasta que falle
         if self.jugadores[0].auto:
             print('Maquina disparando!')
-            while disparar(self.jugadores[0], self.jugadores[1]):
+            codigo = disparar(self.jugadores[0], self.jugadores[1])
+            while codigo == 1:
                 print('Maquina sigue disparando!!')
+                codigo = disparar(self.jugadores[0], self.jugadores[1])
                 pass
+            if codigo == 2:
+                print('Enhorabuena J1, has ganado!, FIN de la partida')
+                return 0
         # si no es automatico, que introduzca la coord de disparo
         else:
             print('Jugador disparando!')
@@ -61,13 +66,16 @@ class Partida:
             #      self.jugadores[1].tablero_propio.devolver_tablero())
             print(self.jugadores[0].tablero_propio.devolver_tablero())
             print('Tablero ajeno')
-            print(self.jugadores[0].tablero_ajeno.devolver_tablero())
+            #print(self.jugadores[0].tablero_ajeno.devolver_tablero())
             print('-----------')
             print('Tablero maquina')
             print(self.jugadores[1].tablero_propio.devolver_tablero())
 
             columna, fila = leer_teclado()
             codigo = disparar(self.jugadores[0], self.jugadores[1], (columna, fila), False, 1)
+            #print('MOCK:')
+            #columnaMOCK, filaMOCK = leer_teclado()
+            #codigoMOCK = disparar(self.jugadores[1], self.jugadores[0], (columnaMOCK, filaMOCK), False, 1)
             while codigo == 1:
                 print('Jugador sigue disparando!')
                 print(self.jugadores[0].tablero_propio.devolver_tablero())
@@ -75,9 +83,10 @@ class Partida:
                 print(self.jugadores[1].tablero_propio.devolver_tablero())
                 columna, fila = leer_teclado()
                 codigo = disparar(self.jugadores[0], self.jugadores[1], (columna, fila), False, 1)
+
                 pass
             if codigo == 2:
-                print('Enhorabuena, has ganado!, FIN de la partida')
+                print('Enhorabuena J1, has ganado!, FIN de la partida')
                 return 0
 
 
@@ -85,18 +94,27 @@ class Partida:
         print('Turno de J2')
         if self.jugadores[1].auto:
             print('Maquina disparando!')
-            while disparar(self.jugadores[1], self.jugadores[0]):
+            codigo = disparar(self.jugadores[1], self.jugadores[0])
+            while codigo == 1:
                 print('Maquina sigue disparando!')
+                codigo = disparar(self.jugadores[1], self.jugadores[0])
+            if codigo == 2:
+                print('Enhorabuena J2, has ganado!, FIN de la partida')
+                return 0
         # si no es automatico, que introduzca la coord de disparo
         else:
             print(self.jugadores[0].tablero_propio.devolver_tablero(),
                   self.jugadores[1].tablero_propio.devolver_tablero())
             columna, fila = leer_teclado()
-            while disparar(self.jugadores[1], self.jugadores[0], (columna, fila), False, 1):
+            codigo = disparar(self.jugadores[1], self.jugadores[0], (columna, fila), False, 1)
+            while codigo == 1:
                 print(self.jugadores[0].tablero_propio.devolver_tablero(),
                       self.jugadores[1].tablero_propio.devolver_tablero())
                 columna, fila = leer_teclado()
-
+                codigo = disparar(self.jugadores[1], self.jugadores[0], (columna, fila), False, 1)
+            if codigo == 2:
+                print('Enhorabuena J2, has ganado!, FIN de la partida')
+                return 0
         return 1
 
     def jugar(self):
