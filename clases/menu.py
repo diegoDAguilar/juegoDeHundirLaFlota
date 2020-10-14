@@ -2,6 +2,7 @@ import pygame
 import pygame_menu
 import os
 from win32api import GetSystemMetrics
+from clases.GUI import *
 
 #Inicializamos juego
 window_width = 960
@@ -28,7 +29,7 @@ menu = pygame_menu.Menu(400, 960, 'Hundir la flota',
                         theme=pygame_menu.themes.THEME_BLUE)
 
 menu.add_selector('Dificultad: ', [('Fácil', 1), ('Medio', 2), ('Dificil', 3)], onchange=seleccionar_dificultad)
-menu.add_button('Jugar', empezar_partida())
+menu.add_button('Jugar', inicio_juego)
 menu.add_button('Salir', pygame_menu.events.EXIT)
 
 menu.mainloop(surface)
