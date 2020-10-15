@@ -18,11 +18,33 @@ class Tablero:
         f = coordenada[1]
         return self.matriz[f, c]
 
-    def set_coordenada(self, coordenada, valor):
+    def set_coordenada(self, coordenada, valor, bordes=False):
+
+        def coordenada_vecina():
+            #print('Comprobando vecinos')
+            np_fc = np.array([celda_c, celda_f])
+            np_fc2 = np.array([c2, f2])
+            resta_vecinos = np.array(([1, 0],
+                             [0, 1],
+                             [-1, 0],
+                             [0, -1],
+                             [1, 1],
+                             [-1, -1],
+                             [-1, 1],
+                             [1, -1]))
+            #print(np_fc - np_fc2)
+            if list(np_fc - np_fc2) in resta_vecinos.tolist():
+                #print('True')
+                return True
+            else:
+                #print('False')
+                return False
+
         c = coordenada[0]
         f = coordenada[1]
+        coordenadas_bordes = list()
         self.matriz[f, c] = valor
-
+        #TODO, no lo hace para cada coordenada del hundido
         # Si toca un barco, busca entre los barcos
         # del tablero aquel con esas coordenadas
         # y lo golpea
@@ -30,6 +52,24 @@ class Tablero:
             for b in self.get_barcos():
                 if coordenada in b.get_coordenadas():
                     b.golpear_barco((c, f))
+                    # Si el barco esta muerto lo rodea
+                    # con agua tocado
+                    if not b.estoy_vivo():
+                        # Bordea cada celda del barco
+                        if bordes:
+                            for celda in b.get_coordenadas():
+                                celda_c, celda_f = celda[0], celda[1]
+                                for f2 in range(TAM_TABLERO):
+                                        for c2 in range(TAM_TABLERO):
+                                            #print('coordenada: ', self.matriz[f2, c2])
+                                            if coordenada_vecina() and self.matriz[f2, c2] == AGUA:
+                                                # Las coordenadas aqui se pintan en el tablero defensor
+                                                # porque ahi es donde estan los barcos, pero despues se
+                                                # tienen que enviar para que las pinte el otro tablero
+                                                self.matriz[f2, c2] = IMPACTO_AGUA
+                                                coordenadas_bordes.append((c2, f2))
+                        return coordenadas_bordes
+
 
 
 
@@ -157,7 +197,7 @@ class Tablero:
     def barco_aislado(coors, tablero):
 
         for c, f in coors:
-            #Comienza el churro
+            #Comienza el churro: si funciona perfecto, nadie lo mira x dentro
             if c==0:
                 if f==0:
                     if (tablero[f, c + 1] == BARCO_VIVO) or \

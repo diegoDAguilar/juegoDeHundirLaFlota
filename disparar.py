@@ -26,8 +26,14 @@ def disparar(ataca, defiende, coordenadas='auto'):
         return D_FALLASTE, (columna, fila)
 
     elif defiende.tablero_propio.get_coordenada((columna, fila)) == BARCO_VIVO:
-        defiende.tablero_propio.set_coordenada((columna, fila), BARCO_TOCADO)
+        coordenadas_bordes = defiende.tablero_propio.set_coordenada((columna, fila), BARCO_TOCADO, True)
         ataca.tablero_ajeno.set_coordenada((columna, fila), BARCO_TOCADO)
+        # Si el barco se ha hundido marca las casillas vecinas
+        # en el tablero atacante, en el defensor ya se han marcado
+        #print('Coordenadas bordes son:', coordenadas_bordes)
+        if coordenadas_bordes:
+            for c, f in coordenadas_bordes:
+                ataca.tablero_ajeno.set_coordenada((c, f), IMPACTO_AGUA)
         print('Tocado')
 
         if defiende.he_perdido():

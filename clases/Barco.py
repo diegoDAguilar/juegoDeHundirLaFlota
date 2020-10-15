@@ -26,7 +26,10 @@ class Barco:
     def golpear_barco(self, impacto):
         c = impacto[0]
         f = impacto[1]
-        self.coordenadas[c, f] = False
+        # Si tiene esa coordenada la marca a False
+        if self.coordenadas.get((c, f)):
+            self.coordenadas[c, f] = False
+
         #print('Barco golpeado')
 
     def get_coordenadas(self):
