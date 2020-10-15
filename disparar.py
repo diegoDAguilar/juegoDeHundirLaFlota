@@ -10,6 +10,7 @@ def disparar(ataca, defiende, coordenadas='auto'):
             if (ataca.tablero_ajeno.matriz[fila, columna] != BARCO_TOCADO and
                     ataca.tablero_ajeno.matriz[fila, columna] != IMPACTO_AGUA):
                 # Sale porque tiene las nuevas coordenadas validas
+                #print('disparo rnd')
                 break
     else:
         columna, fila = coordenadas[0], coordenadas[1]
@@ -18,7 +19,7 @@ def disparar(ataca, defiende, coordenadas='auto'):
     if not 0<=columna<9 and not 0<=fila<=9:
         return D_FALLASTE, (columna, fila)
 
-    print('Disparo (c,f):', (columna, fila))
+    #print('Disparo (c,f):', (columna, fila))
     if defiende.tablero_propio.get_coordenada((columna, fila)) == AGUA:
         defiende.tablero_propio.set_coordenada((columna, fila), IMPACTO_AGUA)
         ataca.tablero_ajeno.set_coordenada((columna, fila), IMPACTO_AGUA)
