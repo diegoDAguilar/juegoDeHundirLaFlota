@@ -1,12 +1,15 @@
 import pygame
+import pygame_gui
 import numpy as np
 import keyboard
 from Constantes import *
 from clases.Barco import *
 from clases.Jugador import Jugador
 from Constantes import *
+from clases.Partida import Partida
 from disparar import disparar
 from clases.Tablero import *
+from funciones import empezar_partida
 
 def registrar_disparo(estado, ancho_celda, alto_celda):
     ## Disparar
@@ -24,9 +27,18 @@ def registrar_disparo(estado, ancho_celda, alto_celda):
     return estado
 
 
-def inicio_juego():
-
+def inicio_juego(dificultad_elegida):
+    print(f'Se ha seleccionado la dificultad {dificultad_elegida}.')
     pygame.init()
+
+    # empieza la partida
+    partida = Partida()
+    for j in partida.jugadores:
+        j.preparar_tablero()
+    #partida.jugar()
+    #print(partida.jugadores[0].tablero_propio.matriz)
+
+    manager = pygame_gui.UIManager((800, 600))
 
     width, height = 960, 400
     screen = pygame.display.set_mode((width, height))
@@ -37,27 +49,35 @@ def inicio_juego():
     # Número de celdas
     celdaX, celdaY = (TAM_TABLERO*2)+4, TAM_TABLERO
 
+
     # Dimension celdas
     ancho_celda = width/celdaX #40
     alto_celda = height/celdaY #40
 
     # Estado de las celdas
 
-    gameState = np.zeros((celdaX,celdaY))
+    gameState = np.zeros((celdaX, celdaY))
 
     # Control de la ejecución del juego
     pauseExect = False
-    color = True
 
+    clock = pygame.time.Clock()
+    contador = 0
+    tablero_j1 = partida.jugadores[0].tablero_propio.matriz
+    visor_j1 = partida.jugadores[0].tablero_ajeno.matriz
     while True:
-
-        color = not color
+        time_delta = clock.tick(1)/1000
 
         newGameState = np.copy(gameState)
         screen.fill(bg)
 
         #Disparamos pulsando
         newGameState = registrar_disparo(newGameState, ancho_celda, alto_celda)
+
+        # Obtenemos el valor actual del tablero de J1
+
+        tablero_j1 = partida.jugadores[0].tablero_propio.matriz
+        visor_j1 = partida.jugadores[0].tablero_ajeno.matriz
 
         for x in range(0, celdaX):
             for y in range(0,celdaY):
@@ -72,13 +92,33 @@ def inicio_juego():
 
 
                 ## Dibujamos la celda para cada par de x e y.
-                if 9<x<14:
+                if 9 < x < 14:
                     pygame.draw.polygon(screen, (0, 0, 0), poly, 0)
-                elif newGameState[x,y] == 1:
-                    pygame.draw.polygon(screen, (50, 50, 50), poly, 0)
+                # Pinta el primer tablero
+                elif x < 10:
+                    if tablero_j1[y,x] == AGUA:
+                        pygame.draw.polygon(screen, (0, 0, 255), poly, 0)
+                    elif tablero_j1[y,x] == BARCO_VIVO:
+                        pygame.draw.polygon(screen, (0, 255, 0), poly, 0)
+                    elif tablero_j1[y, x] == BARCO_TOCADO:
+                        pygame.draw.polygon(screen, (255, 0, 0), poly, 0)
+                    elif tablero_j1[y, x] == IMPACTO_AGUA:
+                        pygame.draw.polygon(screen, (255, 0, 255), poly, 0)
+                # Pinta el visor
                 else:
-                    pygame.draw.polygon(screen, (255, 255, 255), poly, 1)
+                    if visor_j1[y,x-TAM_TABLERO-6] == AGUA:
+                        pygame.draw.polygon(screen, (0, 0, 255), poly, 0)
+                    elif visor_j1[y,x-TAM_TABLERO-6] == BARCO_VIVO:
+                        pygame.draw.polygon(screen, (0, 255, 0), poly, 0)
+                    elif visor_j1[y,x-TAM_TABLERO-6] == BARCO_TOCADO:
+                        pygame.draw.polygon(screen, (255, 0, 0), poly, 0)
+                    elif visor_j1[y,x-TAM_TABLERO-6] == IMPACTO_AGUA:
+                        pygame.draw.polygon(screen, (255, 0, 255), poly, 0)
 
+        manager.update(time_delta)
+        print(contador)
+        contador += 1
+        partida.nuevo_turno()
 
         # Actualizamos el estado del juego
         gameState = np.copy(newGameState)

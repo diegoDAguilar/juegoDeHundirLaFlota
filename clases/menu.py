@@ -16,9 +16,12 @@ os.environ['SDL_VIDEO_CENTERED'] = '0'
 pygame.init()
 surface = pygame.display.set_mode((window_width, window_height))
 
+dificultad = 2
 #Creamos menú
-def seleccionar_dificultad(value, difficulty):
-    print('Seleccionar dificultad:', difficulty)
+def seleccionar_dificultad(value, dif):
+    global dificultad
+    dificultad = dif
+    print('Seleccionar dificultad:', dificultad)
     pass
 
 def empezar_partida():
@@ -29,7 +32,7 @@ menu = pygame_menu.Menu(400, 960, 'Hundir la flota',
                         theme=pygame_menu.themes.THEME_BLUE)
 
 menu.add_selector('Dificultad: ', [('Fácil', 1), ('Medio', 2), ('Dificil', 3)], onchange=seleccionar_dificultad)
-menu.add_button('Jugar', inicio_juego)
+menu.add_button('Jugar', inicio_juego, dificultad)
 menu.add_button('Salir', pygame_menu.events.EXIT)
 
 menu.mainloop(surface)

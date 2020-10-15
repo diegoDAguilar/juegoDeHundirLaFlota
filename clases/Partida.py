@@ -66,10 +66,11 @@ class Partida:
             #print(self.jugadores[1].tablero_propio.devolver_tablero())
             #print(self.jugadores[1].tablero_ajeno.devolver_tablero())
             #print('-----------')
-
-            print(self.jugadores[0].tablero_propio.devolver_tablero())
+            self.jugadores[0].tablero_propio.imprimir_tablero()
+            #print(self.jugadores[0].tablero_propio.devolver_tablero())
             print('---')
-            print(self.jugadores[0].tablero_ajeno.devolver_tablero())
+            self.jugadores[0].tablero_ajeno.imprimir_tablero()
+        #print(self.jugadores[0].tablero_ajeno.devolver_tablero())
 
             columna, fila = leer_teclado()
             codigo, impacto = disparar(self.jugadores[0], self.jugadores[1], (columna, fila))
@@ -78,9 +79,10 @@ class Partida:
             #codigoMOCK, impacto = disparar(self.jugadores[1], self.jugadores[0], (columnaMOCK, filaMOCK))
             while codigo == 1:
                 #print('Jugador sigue disparando!')
-                print(self.jugadores[0].tablero_propio.devolver_tablero())
+                self.jugadores[0].tablero_propio.imprimir_tablero()
+                # print(self.jugadores[0].tablero_propio.devolver_tablero())
                 print('---')
-                print(self.jugadores[0].tablero_ajeno.devolver_tablero())
+                self.jugadores[0].tablero_ajeno.imprimir_tablero()
                 print('-----------')
                 #print('Tablero maquina')
                 #print(self.jugadores[1].tablero_propio.devolver_tablero())

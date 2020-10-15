@@ -308,7 +308,30 @@ class Tablero:
     def devolver_tablero(self):
         return self.matriz
 
+    def imprimir_tablero(self):
+        def borde_horizontal():
+            # Imprime el borde horizontal
+            for c in range(TAM_TABLERO):
+                print('{:->4}'.format('-'), end='')
+            print()
 
+        letra_columna = 97
+        for c in range(TAM_TABLERO):
+            if c == 0:
+                print('    ',end='')
+            print('{:^3}'.format(chr(letra_columna+c).upper()), end='')
+        print()
+
+        borde_horizontal()
+        for f in range(TAM_TABLERO):
+            if f > 8:
+                print(f'{f + 1} |', end='')
+            else:
+                print(f'{f+1}  |', end='')
+            for c in range(TAM_TABLERO):
+                print('{:^3}'.format(self.matriz[f, c]), end='')
+            print('|')
+        borde_horizontal()
 
 if __name__ == '__main__':
     tab1 = Tablero()
