@@ -1,7 +1,4 @@
-from Constantes import *
 from clases.Partida import Partida
-import numpy as np
-
 
 def empezar_partida():
     print("""
@@ -13,20 +10,24 @@ def empezar_partida():
     """)
     print("""
     
-    ---------------------------------
+    --------------------------------------------------------------------------------------------------------------
     
-          - PARTIDA FÁCIL      PULSE 1 - 
-          - PARTIDA DIFÍCIL    PULSE 2 -
-          - SALIR              PULSE 3 -  
+          - PARTIDA FACIL      PULSE 1 - 
+          - PARTIDA NORMAL     PULSE 2 -
+          - PARTIDA DIFICIL    PULSE 3 -
+          - SALIR              PULSE 4 -  
     """)
     opcion = None
-    while opcion not in ['1', '2', '3']:
+    while opcion not in ['1', '2', '3', '4']:
         opcion = input()
 
     if opcion == '1':
         partida = Partida(dificultad=int(opcion))
         partida.jugar()
     elif opcion == '2':
+        partida = Partida(dificultad=int(opcion))
+        partida.jugar()
+    elif opcion == '3':
         partida = Partida(dificultad=int(opcion))
         partida.jugar()
     # opcion 3

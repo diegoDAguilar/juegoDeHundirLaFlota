@@ -1,7 +1,6 @@
-import numpy as np
 from Constantes import *
-from clases.Barco import *
-
+from clases.Barco import Barco
+import numpy as np
 class Tablero:
 
 
@@ -55,6 +54,7 @@ class Tablero:
                     # Si el barco esta muerto lo rodea
                     # con agua tocado
                     if not b.estoy_vivo():
+                        print('Barco hundido')
                         # Bordea cada celda del barco
                         if bordes:
                             for celda in b.get_coordenadas():

@@ -1,7 +1,7 @@
 from clases.Jugador import Jugador
 from Constantes import *
 from disparar import disparar
-from clases.maquina_overpower import maquina_apunta_dispara
+from clases.memoria_maquina import maquina_apunta_dispara
 
 
 class Partida:
@@ -15,7 +15,6 @@ class Partida:
 
     def nuevo_turno(self):
         def leer_teclado():
-            #print('Es su turno, ¡dispare!')
             while True:
                 try:
                     entrada_teclado = input('Coordenadas objetivo: ')
@@ -54,19 +53,15 @@ class Partida:
         #columnaMOCK, filaMOCK = leer_teclado()
         #codigoMOCK, impacto = disparar(self.jugadores[1], self.jugadores[0], (columnaMOCK, filaMOCK))
         while codigo == 1:
-            #print('Jugador sigue disparando!')
             self.jugadores[0].tablero_propio.imprimir_tablero()
-            # print(self.jugadores[0].tablero_propio.devolver_tablero())
-            print('---')
+            print()
             self.jugadores[0].tablero_ajeno.imprimir_tablero()
-            print('-----------')
             columna, fila = leer_teclado()
             codigo, impacto = disparar(self.jugadores[0], self.jugadores[1], (columna, fila))
 
-            pass
         if codigo == 2:
             print('Enhorabuena J1, has ganado!, FIN de la partida')
-            return 0
+            return 1
 
 
         # TURNO J2
@@ -75,23 +70,56 @@ class Partida:
         #print('Maquina disparando!')
         codigo, impacto = disparar(self.jugadores[1], self.jugadores[0])
         if self.dificultad == 1:
-            #print('dif1 ', self.dificultad)
             while codigo == 1:
                 codigo, _ = disparar(self.jugadores[1], self.jugadores[0])
-        if self.dificultad == 2:
-            #print('dif2 ', self.dificultad)
-            codigo, impacto = maquina_apunta_dispara(self.jugadores[1], self.jugadores[0], impacto)
+        if self.dificultad >1 and codigo == 1:
+            codigo = maquina_apunta_dispara(self.jugadores[1], self.jugadores[0], impacto)
         if codigo == 2:
             print('Enhorabuena J2, has ganado!, FIN de la partida')
-            return 0
+            return 2
 
-        return 1
+        # Dificultad 3, la maquina tiene 2 turnos
+        if self.dificultad == 3:
+            codigo, impacto = disparar(self.jugadores[1], self.jugadores[0])
+            if self.dificultad == 1:
+                while codigo == 1:
+                    codigo, _ = disparar(self.jugadores[1], self.jugadores[0])
+            if self.dificultad > 1 and codigo == 1:
+                codigo = maquina_apunta_dispara(self.jugadores[1], self.jugadores[0], impacto)
+            if codigo == 2:
+                print('Enhorabuena J2, has ganado!, FIN de la partida')
+                return 2
+
+        return 0
 
     def jugar(self):
-        print('Estas jugando')
         for j in self.jugadores:
             j.preparar_tablero()
-        print('Tablero listo. Comienza la partida en dificultad ', self.dificultad)
-        while self.nuevo_turno():
+        print('Tableros preparados. Comienza la partida en dificultad ', self.dificultad)
+        resultado = 0
+        while not resultado:
             # contiene los distintos turnos
-            pass
+            resultado = self.nuevo_turno()
+        else:
+            if resultado == 1:
+                print("""
+                                                              
+           ,--.          ,--.                   ,--.          
+,--.  ,--. `--'  ,---. ,-'  '-.  ,---.  ,--.--. `--'  ,--,--. 
+ \  `'  /  ,--. | .--' '-.  .-' | .-. | |  .--' ,--. ' ,-.  | 
+  \    /   |  | \ `--.   |  |   ' '-' ' |  |    |  | \ '-'  | 
+   `--'    `--'  `---'   `--'    `---'  `--'    `--'  `--`--' 
+                                                             
+                """)
+            else:
+                print("""
+                                                                                 
+,------.                                             ,--.            
+|  .-.  \   ,---.  ,--.--. ,--.--. ,--.--.  ,---.  ,-'  '-.  ,--,--. 
+|  |  \  : | .-. : |  .--' |  .--' |  .--' | .-. | '-.  .-' ' ,-.  | 
+|  '--'  / \   --. |  |    |  |    |  |    ' '-' '   |  |   \ '-'  | 
+`-------'   `----' `--'    `--'    `--'     `---'    `--'    `--`--' 
+                                                                     
+                """)
+
+
