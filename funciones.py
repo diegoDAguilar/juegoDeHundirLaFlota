@@ -1,36 +1,28 @@
 from clases.Partida import Partida
+from Constantes import *
+
 
 def empezar_partida():
-    print("""
-,--.  ,--.                      ,--. ,--.             ,--.               ,---. ,--.           ,--.            
-|  '--'  | ,--.,--. ,--,--,   ,-|  | `--' ,--.--.     |  |  ,--,--.     /  .-' |  |  ,---.  ,-'  '-.  ,--,--. 
-|  .--.  | |  ||  | |      \ ' .-. | ,--. |  .--'     |  | ' ,-.  |     |  `-, |  | | .-. | '-.  .-' ' ,-.  | 
-|  |  |  | '  ''  ' |  ||  | \ `-' | |  | |  |        |  | \ '-'  |     |  .-' |  | ' '-' '   |  |   \ '-'  | 
-`--'  `--'  `----'  `--''--'  `---'  `--' `--'        `--'  `--`--'     `--'   `--'  `---'    `--'    `--`--'
-    """)
-    print("""
-    
-    --------------------------------------------------------------------------------------------------------------
-    
-          - PARTIDA FACIL      PULSE 1 - 
-          - PARTIDA NORMAL     PULSE 2 -
-          - PARTIDA DIFICIL    PULSE 3 -
-          - SALIR              PULSE 4 -  
-    """)
-    opcion = None
-    while opcion not in ['1', '2', '3', '4']:
-        opcion = input()
+    """
+    Muestra el menu con las dificultades.
+    El usuario selecciona la dificultad o sale del juego.
+    :return:
+    """
+    print(MSG_LOGO)
+    print(MSG_MENU_DIFICULTADES)
+    opcion_seleccionada = input()
 
-    if opcion == '1':
-        partida = Partida(dificultad=int(opcion))
-        partida.jugar()
-    elif opcion == '2':
-        partida = Partida(dificultad=int(opcion))
-        partida.jugar()
-    elif opcion == '3':
-        partida = Partida(dificultad=int(opcion))
-        partida.jugar()
-    # opcion 3
+    while opcion_seleccionada not in DIFICULTADES and opcion_seleccionada not in SALIR_JUEGO:
+        print(f'opcion_seleccionada {opcion_seleccionada} of type {type(opcion_seleccionada)}')
+        print(MSG_OPCION_ERRONEA)
+        opcion_seleccionada = input()
+        if opcion_seleccionada in SALIR_JUEGO:
+            print(MSG_SALIR_DEL_JUEGO)
+            break
     else:
-        print('HAS SALIDO DEL JUEGO')
+        if opcion_seleccionada in SALIR_JUEGO:
+            print(MSG_SALIR_DEL_JUEGO)
+        else:
+            partida = Partida(dificultad=int(opcion_seleccionada))
+            partida.jugar()
 
