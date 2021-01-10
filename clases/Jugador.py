@@ -10,7 +10,7 @@ class Jugador:
         self.tablero_propio = Tablero()
         self.tablero_ajeno = Tablero()
 
-    def preparar_tablero(self):
+    def preparar_tablero_propio(self):
         # TODO juntar con lo de colocar barcos
         # TODO podra ser rnd o que el jugador elija
         self.tablero_propio.colocar_todos_barcos()

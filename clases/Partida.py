@@ -82,26 +82,11 @@ class Partida:
 
             return columna, fila
 
-        # juega j1, despues j2
-        # TURNO J1
-        # print('Turno de J1')
-        # j1 juega hasta que falle
-
-        # si no es automatico, que introduzca la coord de disparo
-        # self.jugadores[0].tablero_propio.imprimir_tablero()
-        # print()
-        # self.jugadores[0].tablero_ajeno.imprimir_tablero()
         self.imprimir_tableros_j1()
 
         columna, fila = leer_teclado()
         codigo, impacto = disparar(self.jugadores[0], self.jugadores[1], (columna, fila))
-        # print('MOCK:')
-        # columnaMOCK, filaMOCK = leer_teclado()
-        # codigoMOCK, impacto = disparar(self.jugadores[1], self.jugadores[0], (columnaMOCK, filaMOCK))
         while codigo == 1:
-            # self.jugadores[0].tablero_propio.imprimir_tablero()
-            # print()
-            # self.jugadores[0].tablero_ajeno.imprimir_tablero()
             self.imprimir_tableros_j1()
             columna, fila = leer_teclado()
             codigo, impacto = disparar(self.jugadores[0], self.jugadores[1], (columna, fila))
@@ -111,9 +96,6 @@ class Partida:
             return 1
 
         # TURNO J2
-        # print('Turno de J2')
-
-        # print('Maquina disparando!')
         codigo, impacto = disparar(self.jugadores[1], self.jugadores[0])
         if self.dificultad == 1:
             while codigo == 1:
@@ -140,7 +122,15 @@ class Partida:
 
     def empezar_y_jugar(self):
         for j in self.jugadores:
-            j.preparar_tablero()
+            j.preparar_tablero_propio()
+        while True:
+            self.imprimir_tableros_j1()
+            respuesta = input('Si quiere un tablero diferente escriba \'nuevo\'')
+            if respuesta.lower() != 'nuevo':
+                break
+            else:
+                self.jugadores[0] = Jugador()
+                self.jugadores[0].preparar_tablero_propio()
         print('Tableros preparados. Comienza la partida en dificultad ', self.dificultad)
         condicion_victoria = 0
         while not condicion_victoria:
