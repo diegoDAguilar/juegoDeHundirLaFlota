@@ -5,13 +5,15 @@ from clases.memoria_maquina import maquina_apunta_dispara
 
 
 class Partida:
-    def __init__(self, dificultad=1):
-        self.jugadores = []
-        self.dificultad = dificultad
-        self.jugadores.append(Jugador())
-        self.jugadores.append(Jugador())
 
-    def imprimir_tableros_jugador(self):
+    def __init__(self, dificultad):
+        self.jugadores = [
+            Jugador(),
+            Jugador(),
+        ]
+        self.dificultad = dificultad
+
+    def imprimir_tableros_j1(self):
         tablero_propio = self.jugadores[0].tablero_propio.devolver_tablero()
         tablero_ajeno = self.jugadores[0].tablero_ajeno.devolver_tablero()
 
@@ -58,7 +60,7 @@ class Partida:
         borde_horizontal()
         borde_horizontal()
 
-    def nuevo_turno(self):
+    def manejar_turno(self):
         def leer_teclado():
             while True:
                 try:
@@ -89,7 +91,7 @@ class Partida:
         # self.jugadores[0].tablero_propio.imprimir_tablero()
         # print()
         # self.jugadores[0].tablero_ajeno.imprimir_tablero()
-        self.imprimir_tableros_jugador()
+        self.imprimir_tableros_j1()
 
         columna, fila = leer_teclado()
         codigo, impacto = disparar(self.jugadores[0], self.jugadores[1], (columna, fila))
@@ -100,7 +102,7 @@ class Partida:
             # self.jugadores[0].tablero_propio.imprimir_tablero()
             # print()
             # self.jugadores[0].tablero_ajeno.imprimir_tablero()
-            self.imprimir_tableros_jugador()
+            self.imprimir_tableros_j1()
             columna, fila = leer_teclado()
             codigo, impacto = disparar(self.jugadores[0], self.jugadores[1], (columna, fila))
 
@@ -136,16 +138,16 @@ class Partida:
 
         return 0
 
-    def jugar(self):
+    def empezar_y_jugar(self):
         for j in self.jugadores:
             j.preparar_tablero()
         print('Tableros preparados. Comienza la partida en dificultad ', self.dificultad)
-        resultado = 0
-        while not resultado:
+        condicion_victoria = 0
+        while not condicion_victoria:
             # contiene los distintos turnos
-            resultado = self.nuevo_turno()
+            condicion_victoria = self.manejar_turno()
         else:
-            if resultado == 1:
+            if condicion_victoria == 1:
                 print(MSG_VICTORIA)
             else:
                 print(MSG_DERROTA)

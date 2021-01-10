@@ -1,8 +1,8 @@
-from funciones import empezar_partida
+from funciones import menu_dificultades
 
 
 def main():
-    empezar_partida()
+    menu_dificultades()
 
 
 if __name__ == '__main__':

@@ -1,8 +1,9 @@
 from Constantes import *
 from clases.Barco import Barco
 import numpy as np
-class Tablero:
 
+
+class Tablero:
 
     def __init__(self, tamanio=TAM_TABLERO):
         self.matriz = np.full((tamanio, tamanio), AGUA)
@@ -20,30 +21,30 @@ class Tablero:
     def set_coordenada(self, coordenada, valor, bordes=False):
 
         def coordenada_vecina():
-            #print('Comprobando vecinos')
+            # print('Comprobando vecinos')
             np_fc = np.array([celda_c, celda_f])
             np_fc2 = np.array([c2, f2])
             resta_vecinos = np.array(([1, 0],
-                             [0, 1],
-                             [-1, 0],
-                             [0, -1],
-                             [1, 1],
-                             [-1, -1],
-                             [-1, 1],
-                             [1, -1]))
-            #print(np_fc - np_fc2)
+                                      [0, 1],
+                                      [-1, 0],
+                                      [0, -1],
+                                      [1, 1],
+                                      [-1, -1],
+                                      [-1, 1],
+                                      [1, -1]))
+            # print(np_fc - np_fc2)
             if list(np_fc - np_fc2) in resta_vecinos.tolist():
-                #print('True')
+                # print('True')
                 return True
             else:
-                #print('False')
+                # print('False')
                 return False
 
         c = coordenada[0]
         f = coordenada[1]
         coordenadas_bordes = list()
         self.matriz[f, c] = valor
-        #TODO, no lo hace para cada coordenada del hundido
+        # TODO, no lo hace para cada coordenada del hundido
         # Si toca un barco, busca entre los barcos
         # del tablero aquel con esas coordenadas
         # y lo golpea
@@ -60,19 +61,15 @@ class Tablero:
                             for celda in b.get_coordenadas():
                                 celda_c, celda_f = celda[0], celda[1]
                                 for f2 in range(TAM_TABLERO):
-                                        for c2 in range(TAM_TABLERO):
-                                            #print('coordenada: ', self.matriz[f2, c2])
-                                            if coordenada_vecina() and self.matriz[f2, c2] == AGUA:
-                                                # Las coordenadas aqui se pintan en el tablero defensor
-                                                # porque ahi es donde estan los barcos, pero despues se
-                                                # tienen que enviar para que las pinte el otro tablero
-                                                self.matriz[f2, c2] = IMPACTO_AGUA
-                                                coordenadas_bordes.append((c2, f2))
+                                    for c2 in range(TAM_TABLERO):
+                                        # print('coordenada: ', self.matriz[f2, c2])
+                                        if coordenada_vecina() and self.matriz[f2, c2] == AGUA:
+                                            # Las coordenadas aqui se pintan en el tablero defensor
+                                            # porque ahi es donde estan los barcos, pero despues se
+                                            # tienen que enviar para que las pinte el otro tablero
+                                            self.matriz[f2, c2] = IMPACTO_AGUA
+                                            coordenadas_bordes.append((c2, f2))
                         return coordenadas_bordes
-
-
-
-
 
     def colocar_barco(self, tam_barco='auto', coordenadas='auto',
                       orientacion='auto'):
@@ -89,8 +86,6 @@ class Tablero:
         else:
             coordenadas = np.array([coordenadas])
 
-
-
         while True:
             # Variables del tablero
             # x es el segundo elemento, y es el primero
@@ -104,19 +99,19 @@ class Tablero:
             # y colocamos el nuestro
 
             if (0 <= fila - tam_barco) and (orientacion == 'n'):
-                if BARCO_VIVO not in self.matriz[fila-tam_barco:fila, columna]:
+                if BARCO_VIVO not in self.matriz[fila - tam_barco:fila, columna]:
                     l_coordenadas = Tablero.rellenar_coordenadas(columna, fila, tam_barco, orientacion)
                     if Tablero.barco_aislado(l_coordenadas, self.matriz) == True:
                         for c, f in l_coordenadas:
                             self.matriz[f, c] = BARCO_VIVO
 
-                        #Añadimos barco
-                        #print('Creando barco')
-                        #print(l_coordenadas)
-                        #print('orientacion:', orientacion)
+                        # Añadimos barco
+                        # print('Creando barco')
+                        # print(l_coordenadas)
+                        # print('orientacion:', orientacion)
 
                         self.lista_barcos.append(Barco(l_coordenadas))
-                        #print('Barco creado')
+                        # print('Barco creado')
                         break
 
             elif (fila + tam_barco < x_limit) and (orientacion == 's'):
@@ -127,44 +122,44 @@ class Tablero:
                             self.matriz[f, c] = BARCO_VIVO
 
                         # Añadimos barco
-                        #print('Creando barco')
-                        #print(l_coordenadas)
-                        #print('orientacion:', orientacion)
+                        # print('Creando barco')
+                        # print(l_coordenadas)
+                        # print('orientacion:', orientacion)
 
                         self.lista_barcos.append(Barco(l_coordenadas))
-                        #print('Barco creado')
+                        # print('Barco creado')
                         break
 
             elif (columna + tam_barco < y_limit) and (orientacion == 'e'):
-                if BARCO_VIVO not in self.matriz[fila, columna:columna+tam_barco]:
+                if BARCO_VIVO not in self.matriz[fila, columna:columna + tam_barco]:
                     l_coordenadas = Tablero.rellenar_coordenadas(columna, fila, tam_barco, orientacion)
                     if Tablero.barco_aislado(l_coordenadas, self.matriz) == True:
                         for c, f in l_coordenadas:
                             self.matriz[f, c] = BARCO_VIVO
 
-                        #Añadimos barco
-                        #print('Creando barco')
-                        #print(l_coordenadas)
-                        #print('orientacion:', orientacion)
+                        # Añadimos barco
+                        # print('Creando barco')
+                        # print(l_coordenadas)
+                        # print('orientacion:', orientacion)
 
                         self.lista_barcos.append(Barco(l_coordenadas))
-                        #print('Barco creado')
+                        # print('Barco creado')
                         break
 
             elif (0 <= columna - tam_barco) and (orientacion == 'w'):
-                if BARCO_VIVO not in self.matriz[fila, columna-tam_barco:columna]:
+                if BARCO_VIVO not in self.matriz[fila, columna - tam_barco:columna]:
                     l_coordenadas = Tablero.rellenar_coordenadas(columna, fila, tam_barco, orientacion)
                     if Tablero.barco_aislado(l_coordenadas, self.matriz) == True:
                         for c, f in l_coordenadas:
                             self.matriz[f, c] = BARCO_VIVO
 
-                        #Añadimos barco
-                        #print('Creando barco')
-                        #print(l_coordenadas)
-                        #print('orientacion:', orientacion)
+                        # Añadimos barco
+                        # print('Creando barco')
+                        # print(l_coordenadas)
+                        # print('orientacion:', orientacion)
 
                         self.lista_barcos.append(Barco(l_coordenadas))
-                        #print('Barco creado')
+                        # print('Barco creado')
                         break
 
             # Si las coordenadas no son válidas,
@@ -197,15 +192,15 @@ class Tablero:
     def barco_aislado(coors, tablero):
 
         for c, f in coors:
-            #Comienza el churro: si funciona perfecto, nadie lo mira x dentro
-            if c==0:
-                if f==0:
+            # Comienza el churro: si funciona perfecto, nadie lo mira x dentro
+            if c == 0:
+                if f == 0:
                     if (tablero[f, c + 1] == BARCO_VIVO) or \
                             (tablero[f + 1, c] == BARCO_VIVO) or \
                             (tablero[f + 1, c + 1] == BARCO_VIVO):
                         return False
 
-                elif f==9:
+                elif f == 9:
                     if (tablero[f - 1, c] == BARCO_VIVO) or \
                             (tablero[f - 1, c + 1] == BARCO_VIVO) or \
                             (tablero[f, c + 1] == BARCO_VIVO):
@@ -219,14 +214,14 @@ class Tablero:
                             (tablero[f + 1, c + 1] == BARCO_VIVO):
                         return False
 
-            elif c==9:
-                if f==0:
+            elif c == 9:
+                if f == 0:
                     if (tablero[f, c - 1] == BARCO_VIVO) or \
                             (tablero[f + 1, c - 1] == BARCO_VIVO) or \
                             (tablero[f + 1, c] == BARCO_VIVO):
                         return False
 
-                elif f==9:
+                elif f == 9:
                     if (tablero[f - 1, c - 1] == BARCO_VIVO) or \
                             (tablero[f - 1, c] == BARCO_VIVO) or \
                             (tablero[f, c - 1] == BARCO_VIVO):
@@ -240,8 +235,8 @@ class Tablero:
                             (tablero[f + 1, c] == BARCO_VIVO):
                         return False
 
-            elif c!=0 or c!=9:
-                if f==0:
+            elif c != 0 or c != 9:
+                if f == 0:
                     if (tablero[f, c - 1] == BARCO_VIVO) or \
                             (tablero[f, c + 1] == BARCO_VIVO) or \
                             (tablero[f + 1, c - 1] == BARCO_VIVO) or \
@@ -249,7 +244,7 @@ class Tablero:
                             (tablero[f + 1, c + 1] == BARCO_VIVO):
                         return False
 
-                elif f==9:
+                elif f == 9:
                     if (tablero[f - 1, c - 1] == BARCO_VIVO) or \
                             (tablero[f - 1, c] == BARCO_VIVO) or \
                             (tablero[f - 1, c + 1] == BARCO_VIVO) or \
@@ -270,10 +265,9 @@ class Tablero:
         else:
             return True
 
-
     def colocar_todos_barcos(self):
-        #tamanios_barco = [1, 1]
-        tamanios_barco = [1,1,1,1,2,2,2,3,3,4]
+        # tamanios_barco = [1, 1]
+        tamanios_barco = [1, 1, 1, 1, 2, 2, 2, 3, 3, 4]
         """
         # Por ahora colocar 3 barcos y ya:
         #self.colocar_barco(1, np.array((1,1)), 'N')
@@ -299,10 +293,9 @@ class Tablero:
         return
         """
 
-
         for t in tamanios_barco:
-            #x,y = 0,0 # TODO aniadir random y la orientacion random
-            #orientacion = 'N'
+            # x,y = 0,0 # TODO aniadir random y la orientacion random
+            # orientacion = 'N'
             self.colocar_barco(t)
 
     def devolver_tablero(self):
@@ -318,8 +311,8 @@ class Tablero:
         letra_columna = 97
         for c in range(TAM_TABLERO):
             if c == 0:
-                print('    ',end='')
-            print('{:^3}'.format(chr(letra_columna+c).upper()), end='')
+                print('    ', end='')
+            print('{:^3}'.format(chr(letra_columna + c).upper()), end='')
         print()
 
         borde_horizontal()
@@ -327,15 +320,8 @@ class Tablero:
             if f > 8:
                 print(f'{f + 1} |', end='')
             else:
-                print(f'{f+1}  |', end='')
+                print(f'{f + 1}  |', end='')
             for c in range(TAM_TABLERO):
                 print('{:^3}'.format(self.matriz[f, c]), end='')
             print('|')
         borde_horizontal()
-
-if __name__ == '__main__':
-    tab1 = Tablero()
-    print(tab1.devolver_tablero())
-    #BARCO_VIVO in tab1.matriz[1,3]
-    tab1.colocar_barco(4, (3,5), 'n')
-    print(tab1.devolver_tablero())
