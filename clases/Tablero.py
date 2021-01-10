@@ -266,36 +266,7 @@ class Tablero:
             return True
 
     def colocar_todos_barcos(self):
-        # tamanios_barco = [1, 1]
-        tamanios_barco = [1, 1, 1, 1, 2, 2, 2, 3, 3, 4]
-        """
-        # Por ahora colocar 3 barcos y ya:
-        #self.colocar_barco(1, np.array((1,1)), 'N')
-        #self.colocar_barco(3, np.array((5,5)), 'E')
-        #self.colocar_barco(2, np.array((3,3)), 'S')
-        #self.colocar_barco(1)
-        #self.colocar_barco(3)
-        #self.colocar_barco(2)
-
-        # BARCOS MANUALES
-        self.matriz[3, 2] = 'O'
-        self.matriz[3, 3] = 'O'
-
-        self.matriz[0, 8] = 'O'
-        self.matriz[1, 8] = 'O'
-        self.matriz[2, 8] = 'O'
-
-        self.matriz[7, 4] = 'O'
-
-        print('Mis barcos colocados son: ')
-        print(self.matriz)
-        # TODO eliminar esto cuando los tests funcionen
-        return
-        """
-
-        for t in tamanios_barco:
-            # x,y = 0,0 # TODO aniadir random y la orientacion random
-            # orientacion = 'N'
+        for t in TAMANIOS_BARCOS:
             self.colocar_barco(t)
 
     def devolver_tablero(self):

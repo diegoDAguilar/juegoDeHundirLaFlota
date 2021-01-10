@@ -59,6 +59,7 @@ class Partida:
         imprimir_matrices(tablero_propio, tablero_ajeno)
         borde_horizontal()
         borde_horizontal()
+        print()
 
     def manejar_turno(self):
         def leer_teclado():
