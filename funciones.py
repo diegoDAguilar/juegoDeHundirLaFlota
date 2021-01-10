@@ -25,4 +25,3 @@ def menu_dificultades():
         else:
             partida = Partida(dificultad=int(opcion_seleccionada))
             partida.empezar_y_jugar()
-

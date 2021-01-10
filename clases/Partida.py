@@ -13,54 +13,6 @@ class Partida:
         ]
         self.dificultad = dificultad
 
-    def imprimir_tableros_j1(self):
-        tablero_propio = self.jugadores[0].tablero_propio.devolver_tablero()
-        tablero_ajeno = self.jugadores[0].tablero_ajeno.devolver_tablero()
-
-        def borde_horizontal():
-            # Imprime el borde horizontal
-            for c in range(TAM_TABLERO):
-                print('{:->4}'.format('-'), end='')
-
-        def coord_horizontal():
-            letra_columna = 97
-            for c in range(TAM_TABLERO):
-                if c == 0:
-                    print('    ', end='')
-                print('{:^3}'.format(chr(letra_columna + c).upper()), end='')
-
-        # fin_linea para el segundo tablero
-        def imprimir_matrices(t_propio, t_ajeno):
-            for f in range(TAM_TABLERO):
-                for i in range(2):
-                    if i == 1:
-                        print('    ', end='')
-                    if f > 8:
-                        print(f'{f + 1} |', end='')
-                    else:
-                        print(f'{f + 1}  |', end='')
-                    for c in range(TAM_TABLERO):
-                        if i == 0:
-                            print('{:^3}'.format(t_propio[f, c]), end='')
-                        else:
-                            print('{:^3}'.format(t_ajeno[f, c]), end='')
-                    print('|', end='')
-                print()
-
-        borde_horizontal()
-        borde_horizontal()
-        print()
-
-        coord_horizontal()
-        print('     ', end='')
-        coord_horizontal()
-        print()
-
-        imprimir_matrices(tablero_propio, tablero_ajeno)
-        borde_horizontal()
-        borde_horizontal()
-        print()
-
     def manejar_turno(self):
         def leer_teclado():
             while True:
@@ -83,12 +35,12 @@ class Partida:
 
             return columna, fila
 
-        self.imprimir_tableros_j1()
+        self.jugadores[0].imprimir_tableros()
 
         columna, fila = leer_teclado()
         codigo, impacto = disparar(self.jugadores[0], self.jugadores[1], (columna, fila))
         while codigo == 1:
-            self.imprimir_tableros_j1()
+            self.jugadores[0].imprimir_tableros()
             columna, fila = leer_teclado()
             codigo, impacto = disparar(self.jugadores[0], self.jugadores[1], (columna, fila))
 
@@ -122,16 +74,13 @@ class Partida:
         return 0
 
     def empezar_y_jugar(self):
-        for j in self.jugadores:
-            j.preparar_tablero_propio()
         while True:
-            self.imprimir_tableros_j1()
+            self.jugadores[0].imprimir_tableros()
             respuesta = input('Si quiere un tablero diferente escriba \'nuevo\'')
             if respuesta.lower() != 'nuevo':
                 break
             else:
                 self.jugadores[0] = Jugador()
-                self.jugadores[0].preparar_tablero_propio()
         print('Tableros preparados. Comienza la partida en dificultad ', self.dificultad)
         condicion_victoria = 0
         while not condicion_victoria:

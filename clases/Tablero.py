@@ -5,15 +5,18 @@ import numpy as np
 
 class Tablero:
 
-    def __init__(self, tamanio=TAM_TABLERO):
+    def __init__(self, propio, tamanio=TAM_TABLERO):
         self.matriz = np.full((tamanio, tamanio), AGUA)
         self.lista_barcos = []
+        if propio:
+            self.colocar_todos_barcos()
 
     def get_barcos(self):
         """Devuelve la lista con los barcos"""
         return self.lista_barcos
 
     def get_coordenada(self, coordenada):
+        """Devuelve el valor en unas coordenadas"""
         c = coordenada[0]
         f = coordenada[1]
         return self.matriz[f, c]
