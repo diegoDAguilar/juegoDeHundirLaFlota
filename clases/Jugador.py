@@ -18,6 +18,15 @@ class Jugador:
         print('Barcos colocados')
         pass
 
+    def get_coord_propia(self, coordenada):
+        return self.tablero_propio.get_coordenada(coordenada)
+
+    def set_coord_propia(self, coordenada, tipo_impacto, bordes=False):
+        self.tablero_propio.set_coordenada(coordenada, tipo_impacto, bordes)
+
+    def set_coord_ajena(self, coordenada, tipo_impacto, bordes=False):
+        self.tablero_ajeno.set_coordenada(coordenada, tipo_impacto, bordes)
+
     def he_perdido(self):
         """
         Guarda una lista NEGADA con si los barcos estan muertos o no
@@ -33,8 +42,8 @@ class Jugador:
         return all(mis_barcos)
 
     def imprimir_tableros(self):
-        tablero_propio = self.tablero_propio.devolver_tablero()
-        tablero_ajeno = self.tablero_ajeno.devolver_tablero()
+        tablero_propio = self.tablero_propio.get_tablero()
+        tablero_ajeno = self.tablero_ajeno.get_tablero()
 
         def borde_horizontal():
             # Imprime el borde horizontal

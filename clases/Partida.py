@@ -13,11 +13,30 @@ class Partida:
         ]
         self.dificultad = dificultad
 
+    def empezar_y_jugar(self):
+        while True:
+            self.jugadores[0].imprimir_tableros()
+            respuesta = input('Si quiere un tablero diferente escriba \'nuevo\'')
+            if respuesta.lower() != 'nuevo':
+                break
+            else:
+                self.jugadores[0] = Jugador()
+        print('Tableros preparados. Comienza la partida en dificultad ', self.dificultad)
+        condicion_victoria = 0
+        while not condicion_victoria:
+            # contiene los distintos turnos
+            condicion_victoria = self.manejar_turno()
+        else:
+            if condicion_victoria == FIN_VICTORIA:
+                print(MSG_VICTORIA)
+            else:
+                print(MSG_DERROTA)
+
     def manejar_turno(self):
-        def leer_teclado():
+        def leer_coord_disparo():
             while True:
                 try:
-                    entrada_teclado = input('Coordenadas objetivo: ')
+                    entrada_teclado = input('Próximo disparo: \n')
                     # TODO mejorar tratamiento excepciones
                     columna, fila = (ord(entrada_teclado[0].lower())) - 97, int(entrada_teclado[1:]) - 1
                     if (len(entrada_teclado) not in [2, 3] or
@@ -33,61 +52,41 @@ class Partida:
                     # Comienza el juego saliendo de leer teclado
                     break
 
-            return columna, fila
+            return fila, columna
 
         self.jugadores[0].imprimir_tableros()
 
-        columna, fila = leer_teclado()
-        codigo, impacto = disparar(self.jugadores[0], self.jugadores[1], (columna, fila))
-        while codigo == 1:
+        fila, columna = leer_coord_disparo()
+        codigo_disparo, impacto = disparar(self.jugadores[0], self.jugadores[1], (fila, columna))
+        while codigo_disparo == D_ACERTASTE:
             self.jugadores[0].imprimir_tableros()
-            columna, fila = leer_teclado()
-            codigo, impacto = disparar(self.jugadores[0], self.jugadores[1], (columna, fila))
+            fila, columna = leer_coord_disparo()
+            codigo_disparo, impacto = disparar(self.jugadores[0], self.jugadores[1], (fila, columna))
 
-        if codigo == 2:
-            print('Enhorabuena J1, has ganado!, FIN de la partida')
-            return 1
+        if codigo_disparo == D_VICTORIA:
+            print('Enhorabuena J1, has ganado, fin de la partida.')
+            return FIN_VICTORIA
 
         # TURNO J2
-        codigo, impacto = disparar(self.jugadores[1], self.jugadores[0])
+        codigo_disparo, impacto = disparar(self.jugadores[1], self.jugadores[0])
         if self.dificultad == 1:
-            while codigo == 1:
-                codigo, _ = disparar(self.jugadores[1], self.jugadores[0])
-        if self.dificultad > 1 and codigo == 1:
-            codigo = maquina_apunta_dispara(self.jugadores[1], self.jugadores[0], impacto)
-        if codigo == 2:
-            print('Enhorabuena J2, has ganado!, FIN de la partida')
-            return 2
+            while codigo_disparo == D_ACERTASTE:
+                codigo_disparo, _ = disparar(self.jugadores[1], self.jugadores[0])
+        if self.dificultad > 1 and codigo_disparo == D_ACERTASTE:
+            codigo_disparo = maquina_apunta_dispara(self.jugadores[1], self.jugadores[0], impacto)
+        if codigo_disparo == D_VICTORIA:
+            print('Victoria de J2, fin de la partida.')
+            return FIN_DERROTA
 
         # Dificultad 3, la maquina tiene 2 turnos
         if self.dificultad == 3:
-            codigo, impacto = disparar(self.jugadores[1], self.jugadores[0])
-            if self.dificultad == 1:
-                while codigo == 1:
-                    codigo, _ = disparar(self.jugadores[1], self.jugadores[0])
-            if self.dificultad > 1 and codigo == 1:
-                codigo = maquina_apunta_dispara(self.jugadores[1], self.jugadores[0], impacto)
-            if codigo == 2:
-                print('Enhorabuena J2, has ganado!, FIN de la partida')
-                return 2
+            codigo_disparo, impacto = disparar(self.jugadores[1], self.jugadores[0])
+            while codigo_disparo == D_ACERTASTE:
+                codigo_disparo, _ = disparar(self.jugadores[1], self.jugadores[0])
+            if self.dificultad > 1 and codigo_disparo == D_ACERTASTE:
+                codigo_disparo = maquina_apunta_dispara(self.jugadores[1], self.jugadores[0], impacto)
+            if codigo_disparo == D_VICTORIA:
+                print('Victoria de J2, pero era muy difícil y nadie esperaba que lo lograses, fin de la partida.')
+                return FIN_DERROTA
 
         return 0
-
-    def empezar_y_jugar(self):
-        while True:
-            self.jugadores[0].imprimir_tableros()
-            respuesta = input('Si quiere un tablero diferente escriba \'nuevo\'')
-            if respuesta.lower() != 'nuevo':
-                break
-            else:
-                self.jugadores[0] = Jugador()
-        print('Tableros preparados. Comienza la partida en dificultad ', self.dificultad)
-        condicion_victoria = 0
-        while not condicion_victoria:
-            # contiene los distintos turnos
-            condicion_victoria = self.manejar_turno()
-        else:
-            if condicion_victoria == 1:
-                print(MSG_VICTORIA)
-            else:
-                print(MSG_DERROTA)

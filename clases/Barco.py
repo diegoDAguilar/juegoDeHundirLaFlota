@@ -13,9 +13,9 @@ class Barco:
         else:
             return False
 
-    def golpear_barco(self, impacto):
-        c = impacto[0]
-        f = impacto[1]
+    def golpear_barco(self, coordenada_impacto):
+        f = coordenada_impacto[0]
+        c = coordenada_impacto[1]
         # Si tiene esa coordenada la marca a False
         if self.coordenadas.get((c, f)):
             self.coordenadas[c, f] = False

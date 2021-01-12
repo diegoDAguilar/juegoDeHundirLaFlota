@@ -51,6 +51,8 @@ def maquina_apunta_dispara(ataca, defiende, d1):
             eligiendo = not eligiendo
 
         d2 = objetivos_pendientes.pop(np.random.randint(len(objetivos_pendientes)))
+        # Se usa porque he cambiado el orden de columna fila a fila columna
+        d2 = d2[::-1]
         #print('d2 es: ', d2)
         d2_acierta, _ = disparar(ataca, defiende, d2)
         # si acierta el segundo disparo Y NO ESTA MUERTO
