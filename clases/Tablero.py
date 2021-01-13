@@ -1,6 +1,7 @@
 from Constantes import *
 from clases.Barco import Barco
 import numpy as np
+import logging
 
 
 class Tablero:
@@ -10,6 +11,8 @@ class Tablero:
         self.lista_barcos = []
         if propio:
             self.colocar_todos_barcos()
+        logging.basicConfig(level=logging.INFO)
+        logging.info('Objeto Tablero creado')
 
     def get_barcos(self):
         """Devuelve la lista con los barcos"""
@@ -19,7 +22,7 @@ class Tablero:
         """Devuelve el valor en unas coordenadas (fila, columna)"""
         return self.matriz[coordenada]
 
-    def set_coordenada(self, coordenada, valor, bordes=False):
+    def set_coordenada(self, coordenada, valor):
 
         def coordenada_vecina():
             # print('Comprobando vecinos')
@@ -43,7 +46,6 @@ class Tablero:
 
         coordenadas_bordes = list()
         self.matriz[coordenada] = valor
-        # TODO, no lo hace para cada coordenada del hundido
         # Si toca un barco, busca entre los barcos
         # del tablero aquel con esas coordenadas
         # y lo golpea
@@ -56,19 +58,22 @@ class Tablero:
                     if not b.estoy_vivo():
                         print('Barco hundido')
                         # Bordea cada celda del barco
-                        if bordes:
-                            for celda in b.get_coordenadas():
-                                celda_c, celda_f = celda[0], celda[1]
-                                for f2 in range(TAM_TABLERO):
-                                    for c2 in range(TAM_TABLERO):
-                                        # print('coordenada: ', self.matriz[f2, c2])
-                                        if coordenada_vecina() and self.matriz[f2, c2] == AGUA:
-                                            # Las coordenadas aqui se pintan en el tablero defensor
-                                            # porque ahi es donde estan los barcos, pero despues se
-                                            # tienen que enviar para que las pinte el otro tablero
-                                            self.matriz[f2, c2] = IMPACTO_AGUA
-                                            coordenadas_bordes.append((c2, f2))
-                        return coordenadas_bordes
+                        for celda_barco in b.get_coordenadas():
+                            celda_f, celda_c = celda_barco
+                            for f2 in range(TAM_TABLERO):
+                                for c2 in range(TAM_TABLERO):
+                                    # print('coordenada: ', self.matriz[f2, c2])
+                                    if coordenada_vecina() and self.matriz[f2, c2] == AGUA:
+                                        # Las coordenadas aqui se pintan en el tablero defensor
+                                        # porque ahi es donde estan los barcos, pero despues se
+                                        # tienen que enviar para que las pinte el otro tablero
+                                        #self.matriz[f2, c2] = IMPACTO_AGUA
+                                        coordenadas_bordes.append((f2, c2))
+                        return BARCO_HUNDIDO, coordenadas_bordes
+        return valor, list()
+
+        # Devueve el valor del disparo o BARCO_HUNDIDO
+        return valor
 
     def colocar_barco(self, tam_barco, coordenadas='auto',
                       orientacion='auto'):
@@ -96,7 +101,10 @@ class Tablero:
                     for f, c in l_coordenadas:
                         self.matriz[f, c] = BARCO_VIVO
                     else:
-                        print('Barco colocado')
+                        # Se crea el barco
+                        self.lista_barcos.append(Barco(l_coordenadas))
+                        logging.info(f'Barco colocado en {l_coordenadas}')
+                        # print('Barco colocado')
                         return
 
             # Si las coordenadas no son válidas,
@@ -104,27 +112,32 @@ class Tablero:
             orientacion = orientaciones[np.random.randint(4)]
             coordenadas = (np.random.randint(TAM_TABLERO), np.random.randint(TAM_TABLERO))
 
-
     @staticmethod
     def entra_barco(coordenada_origen, tam_barco, orientacion):
         coord = coordenada_origen
-        for _ in range(tam_barco):
-            f, c = coord + ORIENTACION_OFFSET[orientacion]
-            if (0 >= f >= TAM_TABLERO) and (0 >= c >= TAM_TABLERO):
+        for idx in range(tam_barco):
+            f, c = np.array(coord) + idx * np.array(ORIENTACION_OFFSET[orientacion])
+            if (TAM_TABLERO > f >= 0) and (TAM_TABLERO > c >= 0):
+                # print('Entra:', f, c)
                 pass
             else:
                 return False
         else:
+            # logging.info(f'Barco completo comienza en {str(coordenada_origen)}, ori: {orientacion}, tam {tam_barco}')
             return True
 
     @staticmethod
     def calcular_coordenadas_barco(coordenadas, tam_barco, orientacion):
         lista_coordenadas = list()
-        coord_actual = np.array([coordenadas])
+        coord_actual = np.array(coordenadas)
+
+        assert coordenadas[0] >= 0
+        assert coordenadas[1] >= 0
 
         for _ in range(tam_barco):
             lista_coordenadas.append(coord_actual)
-            coord_actual += np.array(ORIENTACION_OFFSET[orientacion])
+            coord_actual = coord_actual + np.array(ORIENTACION_OFFSET[orientacion])
+            # [array([[2, 8]])]
         return lista_coordenadas
 
     def barco_aislado(self, coord):
@@ -141,7 +154,8 @@ class Tablero:
                 (f + 1, c + 1),
             ]
             for fv, cv in coord_vecinas:
-                if (0 < fv < TAM_TABLERO) and (0 < cv < TAM_TABLERO) and (self.matriz[fv, cv] == BARCO_VIVO):
+                # If it is inside of the board
+                if (0 <= fv < TAM_TABLERO) and (0 <= cv < TAM_TABLERO) and (self.matriz[fv, cv] == BARCO_VIVO):
                     return False
 
         else:

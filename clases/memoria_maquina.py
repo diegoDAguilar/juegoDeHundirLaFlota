@@ -1,6 +1,6 @@
 import numpy as np
 from Constantes import *
-from disparar import disparar
+from disparar import disparar_old
 
 
 def maquina_apunta_dispara(ataca, defiende, d1):
@@ -54,7 +54,7 @@ def maquina_apunta_dispara(ataca, defiende, d1):
         # Se usa porque he cambiado el orden de columna fila a fila columna
         d2 = d2[::-1]
         #print('d2 es: ', d2)
-        d2_acierta, _ = disparar(ataca, defiende, d2)
+        d2_acierta, _ = disparar_old(ataca, defiende, d2)
         # si acierta el segundo disparo Y NO ESTA MUERTO
         if d2_acierta:
             #print(f'Coordenada Vertical u Horizontal del barco localizada en {d2}.')
@@ -65,12 +65,12 @@ def maquina_apunta_dispara(ataca, defiende, d1):
                 # mientras el barco siga a flote sigue insistiendo en esa direccion
                 # Comprueba que la coordenada a disparar siga dentro del tablero
                 if 0<=d2[0] + coord_dict[direccion][0]<=9 and 0<=d2[1] + coord_dict[direccion][1]<=9:
-                    dn_acierta, _ = disparar(ataca, defiende, (d2[0] + coord_dict[direccion][0],
-                                          d2[1] + coord_dict[direccion][1]))
+                    dn_acierta, _ = disparar_old(ataca, defiende, (d2[0] + coord_dict[direccion][0],
+                                                                   d2[1] + coord_dict[direccion][1]))
                 else:
                     # Con este codigo se prevee el error de salirse del tablero
-                    dn_acierta, _ = disparar(ataca, defiende, (np.random.randint(TAM_TABLERO),
-                                                               np.random.randint(TAM_TABLERO)))
+                    dn_acierta, _ = disparar_old(ataca, defiende, (np.random.randint(TAM_TABLERO),
+                                                                   np.random.randint(TAM_TABLERO)))
                 # si hunde el barco vacia la lista de disparos pendientes y termina
                 if dn_acierta == D_VICTORIA:
                     return D_VICTORIA

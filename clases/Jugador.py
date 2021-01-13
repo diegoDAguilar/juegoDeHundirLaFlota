@@ -1,31 +1,94 @@
 from clases.Tablero import Tablero
 from Constantes import *
+import logging
+import numpy as np
 
 
 class Jugador:
-    def __init__(self):
+    def __init__(self, name):
         """
         El jugador tiene el tablero donde coloca sus
         barcos y el tablero donde va marcando sus disparos
         """
+        self.name = name
         self.tablero_propio = Tablero(propio=True)
         self.tablero_ajeno = Tablero(propio=False)
-
-    def preparar_tablero_propio(self):
-        # TODO juntar con lo de colocar barcos
-        # TODO podra ser rnd o que el jugador elija
-        self.tablero_propio.colocar_todos_barcos()
-        print('Barcos colocados')
-        pass
+        logging.basicConfig(level=logging.INFO)
+        logging.info('Objeto Jugador creado')
 
     def get_coord_propia(self, coordenada):
         return self.tablero_propio.get_coordenada(coordenada)
 
-    def set_coord_propia(self, coordenada, tipo_impacto, bordes=False):
-        self.tablero_propio.set_coordenada(coordenada, tipo_impacto, bordes)
+    def set_coord_propia(self, coordenada, tipo_impacto):
+        return self.tablero_propio.set_coordenada(coordenada, tipo_impacto)
 
-    def set_coord_ajena(self, coordenada, tipo_impacto, bordes=False):
-        self.tablero_ajeno.set_coordenada(coordenada, tipo_impacto, bordes)
+    def set_coord_ajena(self, coordenada, tipo_impacto):
+        return self.tablero_ajeno.set_coordenada(coordenada, tipo_impacto)
+
+    def turno(self, defensor, modo='manual'):
+        def get_coord_disparo():
+            if modo != 'manual':
+                while True:
+                    coordenadas = np.random.randint(TAM_TABLERO), np.random.randint(TAM_TABLERO)
+                    if self.tablero_ajeno.matriz[coordenadas] == AGUA:
+                        # Sale porque tiene las nuevas coordenadas validas
+                        break
+                return coordenadas
+            else:
+                while True:
+                    try:
+                        entrada_teclado = input('Próximo disparo: \n')
+                        # TODO mejorar tratamiento excepciones
+                        columna, fila = (ord(entrada_teclado[0].lower())) - 97, int(entrada_teclado[1:]) - 1
+                        if (len(entrada_teclado) not in [2, 3] or
+                                not 0 <= fila < TAM_TABLERO or
+                                not 0 <= columna < TAM_TABLERO):
+                            # print('Ha fallado una condicion')
+                            raise
+                    except:
+                        print('''El formato de las coordenadas debe ser:)
+                        Columnas A-J, filas 1-10, ej: A8
+                        En el except''')
+                    else:
+                        # Comienza el juego saliendo de leer teclado
+                        break
+
+                return fila, columna
+
+        if modo == 'manual':
+            self.imprimir_tableros()
+        coordenadas = get_coord_disparo()
+        codigo_disparo = self.disparar(defensor, coordenadas)
+        while codigo_disparo == D_ACERTASTE:
+            if modo == 'manual':
+                self.imprimir_tableros()
+            coordenadas = get_coord_disparo()
+            codigo_disparo = self.disparar(defensor, coordenadas)
+        else:
+            if defensor.he_perdido():
+                print(f'Enhorabuena {self.name}, has ganado, fin de la partida.')
+                return FIN_VICTORIA
+        return PARTIDA_CONTINUA
+
+    def disparar(self, defensor, coordenadas):
+        if defensor.get_coord_propia(coordenadas) == AGUA:
+            defensor.set_coord_propia(coordenadas, IMPACTO_AGUA)
+            self.set_coord_ajena(coordenadas, IMPACTO_AGUA)
+            logging.info('Agua')
+            return D_FALLASTE
+        elif defensor.get_coord_propia(coordenadas) == BARCO_VIVO:
+            resultado_impacto, lista_bordes = defensor.set_coord_propia(coordenadas, BARCO_TOCADO)
+            self.set_coord_ajena(coordenadas, BARCO_TOCADO)
+            logging.info('Tocado')
+
+            if resultado_impacto == BARCO_HUNDIDO:
+                for e in lista_bordes:
+                    defensor.set_coord_propia(e, IMPACTO_AGUA)
+                    self.set_coord_ajena(e, IMPACTO_AGUA)
+                else:
+                    logging.info('Barco rodeado')
+            return D_ACERTASTE
+
 
     def he_perdido(self):
         """

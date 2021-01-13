@@ -1,6 +1,6 @@
 from clases.Partida import Partida
 from Constantes import *
-
+import logging
 
 def menu_dificultades():
     """
@@ -23,5 +23,7 @@ def menu_dificultades():
         if opcion_seleccionada in SALIR_JUEGO:
             print(MSG_SALIR_DEL_JUEGO)
         else:
+            logging.basicConfig(level=logging.INFO)
+            logging.info('Creando partida...')
             partida = Partida(dificultad=int(opcion_seleccionada))
             partida.empezar_y_jugar()
