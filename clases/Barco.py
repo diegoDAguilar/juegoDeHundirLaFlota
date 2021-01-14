@@ -9,7 +9,7 @@ class Barco:
         #Diccionario de coordenadas
         self.coordenadas = dict(zip(map(tuple, coordenadas), [True for _ in coordenadas]))
         logging.basicConfig(level=logging.INFO)
-        logging.info('Objeto Barco creado')
+        #logging.info('Objeto Barco creado')
 
     def estoy_vivo(self):
         for c in self.coordenadas.values():

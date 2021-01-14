@@ -12,7 +12,7 @@ class Tablero:
         if propio:
             self.colocar_todos_barcos()
         logging.basicConfig(level=logging.INFO)
-        logging.info('Objeto Tablero creado')
+        #logging.info('Objeto Tablero creado')
 
     def get_barcos(self):
         """Devuelve la lista con los barcos"""
@@ -103,7 +103,7 @@ class Tablero:
                     else:
                         # Se crea el barco
                         self.lista_barcos.append(Barco(l_coordenadas))
-                        logging.info(f'Barco colocado en {l_coordenadas}')
+                        #logging.info(f'Barco colocado en {l_coordenadas}')
                         # print('Barco colocado')
                         return
 

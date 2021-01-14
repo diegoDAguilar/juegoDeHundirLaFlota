@@ -11,10 +11,11 @@ class Jugador:
         barcos y el tablero donde va marcando sus disparos
         """
         self.name = name
+        self.memoria = list()
         self.tablero_propio = Tablero(propio=True)
         self.tablero_ajeno = Tablero(propio=False)
         logging.basicConfig(level=logging.INFO)
-        logging.info('Objeto Jugador creado')
+        #logging.info('Objeto Jugador creado')
 
     def get_coord_propia(self, coordenada):
         return self.tablero_propio.get_coordenada(coordenada)
@@ -26,14 +27,42 @@ class Jugador:
         return self.tablero_ajeno.set_coordenada(coordenada, tipo_impacto)
 
     def turno(self, defensor, modo='manual'):
-        def get_coord_disparo():
+
+        def get_vecina(anterior_impacto):
+            f, c = anterior_impacto
+            coord_vecinas = [
+                (f - 1, c),
+                (f, c - 1),
+                (f, c + 1),
+                (f + 1, c),
+            ]
+            np.random.shuffle(coord_vecinas)
+            for fv, cv in coord_vecinas:
+                # If it is inside of the board
+                if (0 <= fv < TAM_TABLERO) and (0 <= cv < TAM_TABLERO) and (self.tablero_ajeno.get_coordenada((fv, cv)) == AGUA):
+                    return fv, cv
+
+        def get_coord_disparo(anterior_impacto=None):
+            # Modo automatico
             if modo != 'manual':
+                coordenadas_nuevas = None
+                # Intenta conseguir las coordenadas a partir del anterior disparo hasta 4 veces
+                contador = 4
                 while True:
-                    coordenadas = np.random.randint(TAM_TABLERO), np.random.randint(TAM_TABLERO)
-                    if self.tablero_ajeno.matriz[coordenadas] == AGUA:
+                    #print('Bucle get_coord_disparo')
+                    if anterior_impacto and contador:
+                        coordenadas_nuevas = get_vecina(anterior_impacto)
+                        contador -= 1
+                    if not coordenadas_nuevas:
+                        coordenadas_nuevas = np.random.randint(TAM_TABLERO), np.random.randint(TAM_TABLERO)
+
+                    if self.tablero_ajeno.get_coordenada(coordenadas_nuevas) == AGUA:
                         # Sale porque tiene las nuevas coordenadas validas
                         break
-                return coordenadas
+                    else:
+                        coordenadas_nuevas = None
+                return coordenadas_nuevas
+            # Modo introducir las coordenadas
             else:
                 while True:
                     try:
@@ -47,8 +76,7 @@ class Jugador:
                             raise
                     except:
                         print('''El formato de las coordenadas debe ser:)
-                        Columnas A-J, filas 1-10, ej: A8
-                        En el except''')
+                        Columnas A-J, filas 1-10, ej: A8''')
                     else:
                         # Comienza el juego saliendo de leer teclado
                         break
@@ -62,12 +90,12 @@ class Jugador:
         while codigo_disparo == D_ACERTASTE:
             if modo == 'manual':
                 self.imprimir_tableros()
-            coordenadas = get_coord_disparo()
-            codigo_disparo = self.disparar(defensor, coordenadas)
-        else:
             if defensor.he_perdido():
                 print(f'Enhorabuena {self.name}, has ganado, fin de la partida.')
                 return FIN_VICTORIA
+            # Saca las nuevas coordenadas usando la memoria de las anteriores
+            coordenadas = get_coord_disparo(coordenadas)
+            codigo_disparo = self.disparar(defensor, coordenadas)
         return PARTIDA_CONTINUA
 
     def disparar(self, defensor, coordenadas):
@@ -88,7 +116,6 @@ class Jugador:
                 else:
                     logging.info('Barco rodeado')
             return D_ACERTASTE
-
 
     def he_perdido(self):
         """

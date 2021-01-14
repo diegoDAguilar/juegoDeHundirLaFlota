@@ -1,7 +1,5 @@
 from clases.Jugador import Jugador
 from Constantes import *
-from disparar import disparar_old
-from clases.memoria_maquina import maquina_apunta_dispara
 import logging
 
 
@@ -14,13 +12,13 @@ class Partida:
         ]
         self.dificultad = dificultad
         logging.basicConfig(level=logging.INFO)
-        logging.info('Objeto Partida creado')
+        #logging.info('Objeto Partida creado')
 
     def empezar_y_jugar(self):
         while True:
             self.jugadores[0].imprimir_tableros()
-            respuesta = input('Si quiere un tablero diferente escriba \'nuevo\'')
-            if respuesta.lower() != 'nuevo':
+            respuesta = input('Recargar tablero(Enter). Para jugar pulse cualquier otra tecla.')
+            if respuesta.lower() != '':
                 break
             else:
                 self.jugadores[0] = Jugador('J1')
@@ -36,18 +34,21 @@ class Partida:
                 print(MSG_DERROTA)
 
     def manejar_turno(self):
+        logging.info('Turno J1')
         # Turno de J1
         cod_j1 = self.jugadores[0].turno(defensor=self.jugadores[1])
         if cod_j1 == FIN_VICTORIA:
             return FIN_VICTORIA
 
+        logging.info('Turno J2')
         # Turno de J2
         cod_j2 = self.jugadores[1].turno(defensor=self.jugadores[0], modo='auto')
         if cod_j2 == FIN_VICTORIA:
             return FIN_DERROTA
 
-        # Dificultad 3, la maquina tiene 2 turnos
-        if self.dificultad == 3:
+        # Dificultad 2, la maquina tiene 2 turnos
+        if self.dificultad == 2:
+            logging.info('Turno J2.2')
             cod_j2 = self.jugadores[1].turno(defensor=self.jugadores[0], modo='auto')
             if cod_j2 == FIN_VICTORIA:
                 return FIN_DERROTA

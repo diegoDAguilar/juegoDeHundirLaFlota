@@ -2,6 +2,7 @@ from clases.Partida import Partida
 from Constantes import *
 import logging
 
+
 def menu_dificultades():
     """
     Muestra el menu con las dificultades.
