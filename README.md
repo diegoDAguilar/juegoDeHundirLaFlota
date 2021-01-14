@@ -13,4 +13,4 @@ Las reglas son las habituales:
 - Normal: La IA dirige redirige su disparo una vez localiza un barco.
 - Trampas: Además de lo anterior la IA juega 2 veces en su turno.
 
-imagen recargar tablero, imagen derrota, 
+imagen recargar tablero, imagen derrota, imagen rodear de agua un barco hundido
