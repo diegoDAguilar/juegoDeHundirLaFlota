@@ -1,6 +1,6 @@
 # Juego De Hundir La Flota
 
-IMAGEN
+![menu_principal](./capturasHundirFlota/menu_principal.PNG)
 
 Versión del clásico de Hundir la flota desarrollada en Python.
 Las reglas son las habituales:
@@ -13,4 +13,15 @@ Las reglas son las habituales:
 - Normal: La IA dirige redirige su disparo una vez localiza un barco.
 - Trampas: Además de lo anterior la IA juega 2 veces en su turno.
 
-imagen recargar tablero, imagen derrota, imagen rodear de agua un barco hundido
+## Capturas:
+<img src="./capturasHundirFlota/recargar_tablero.PNG" width="500">
+*Inicio de partida. Se puede recargar el tablero tantas veces como se quiera. *
+
+<img src="./capturasHundirFlota/turno1_ia_desatada.PNG" width="500">
+*Después del primer turno jugando contra una IA con trampas. *
+
+<img src="./capturasHundirFlota/jugar_sin_estrategia.PNG" width="500">
+*Jugar sin estrategia alguna. *
+
+<img src="./capturasHundirFlota/msg_derrota.PNG" width="500">
+*Pantalla derrota.*
