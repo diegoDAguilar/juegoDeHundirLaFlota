@@ -11,17 +11,21 @@ Las reglas son las habituales:
 
 2 Dificultades implementadas:
 - Normal: La IA dirige redirige su disparo una vez localiza un barco.
-- Trampas: Además de lo anterior la IA juega 2 veces en su turno.
+- Trampas: Además de lo anterior, la IA juega 2 veces en su turno.
 
 ## Capturas:
-<img src="./capturasHundirFlota/recargar_tablero.PNG" width="500">
-*Inicio de partida. Se puede recargar el tablero tantas veces como se quiera. *
+<img src="./capturasHundirFlota/recargar_tablero.PNG" width="500"> 
+
+<i>Inicio de partida. Se puede recargar el tablero tantas veces como se quiera
 
 <img src="./capturasHundirFlota/turno1_ia_desatada.PNG" width="500">
-*Después del primer turno jugando contra una IA con trampas. *
+
+<i>Después del primer turno jugando contra una IA con trampas.
 
 <img src="./capturasHundirFlota/jugar_sin_estrategia.PNG" width="500">
-*Jugar sin estrategia alguna. *
+
+<i>Jugar sin estrategia alguna.
 
 <img src="./capturasHundirFlota/msg_derrota.PNG" width="500">
-*Pantalla derrota.*
+
+<i>Pantalla derrota.
