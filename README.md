@@ -13,6 +13,10 @@ Las reglas son las habituales:
 - Normal: La IA dirige redirige su disparo una vez localiza un barco.
 - Trampas: Además de lo anterior, la IA juega 2 veces en su turno.
 
+Para ejecutar la aplicación se puede abrir el proyecto e instalar
+las dependencias de *requirements.txt* o si sólo se quiere jugar
+basta con correr el archivo **main.exe** en Windows.
+
 ## Capturas:
 <img src="./capturasHundirFlota/recargar_tablero.PNG" width="500"> 
 
